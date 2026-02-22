@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    tauri_drizzle_proxy_lib::run()
+    ankewelt_lib::run()
 }
