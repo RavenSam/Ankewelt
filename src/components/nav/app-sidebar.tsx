@@ -1,6 +1,6 @@
 import { IconHelp, IconSearch, IconSettings } from "@tabler/icons-react"
 import type * as React from "react"
-
+import type { NavItemType } from "types"
 import { NavMain } from "@/components/nav/nav-main"
 import { NavSecondary } from "@/components/nav/nav-secondary"
 import { NavUser } from "@/components/nav/nav-user"
@@ -41,7 +41,7 @@ const data = {
 	],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ navItems, ...props }: React.ComponentProps<typeof Sidebar> & { navItems: NavItemType[] }) {
 	return (
 		<Sidebar collapsible="offcanvas" {...props}>
 			<SidebarHeader>
@@ -57,7 +57,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				</SidebarMenu>
 			</SidebarHeader>
 			<SidebarContent>
-				<NavMain />
+				<NavMain navItems={navItems} />
 				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>
 			<SidebarFooter>

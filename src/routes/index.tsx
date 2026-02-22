@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
 import { Switch } from "@/components/ui/switch"
+import seed from "@/db/seed"
 
 export const Route = createFileRoute("/")({
 	component: () => <HomePage />,

@@ -23,17 +23,17 @@ function App() {
 		return JSON.stringify(posts, null, 2)
 	}
 
-	useEffect(() => {
-		async function runSeeder() {
-			try {
-				await seed()
-				console.log("Database seeded successfully")
-			} catch (error) {
-				console.error("Error seeding database:", error)
-			}
-		}
-		runSeeder()
-	}, [])
+	// useEffect(() => {
+	// 	async function runSeeder() {
+	// 		try {
+	// 			await seed()
+	// 			console.log("Database seeded successfully")
+	// 		} catch (error) {
+	// 			console.error("Error seeding database:", error)
+	// 		}
+	// 	}
+	// 	runSeeder()
+	// }, [])
 
 	return (
 		<main className="container">
