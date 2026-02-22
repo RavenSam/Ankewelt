@@ -1,7 +1,6 @@
-import { relations, sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import comment from "./comment";
-import post from "./post";
+import { relations, sql } from "drizzle-orm"
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
+import book from "./book"
 
 const user = sqliteTable("user", {
 	id: integer("id").primaryKey().unique(),
@@ -11,12 +10,11 @@ const user = sqliteTable("user", {
 	city: text("city").default("NULL"),
 
 	created_at: text("created_at").default(sql`CURRENT_TIMESTAMP`),
-	updated_at: text("updated_at").default(sql`CURRENT_TIMESTAMP`)
-});
+	updated_at: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
+})
 
 export const userRelations = relations(user, ({ many }) => ({
-	posts: many(post),
-	comments: many(comment)
-}));
+	books: many(book),
+}))
 
-export default user;
+export default user

@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.0.4/schema.json",
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
 	"vcs": {
 		"enabled": false,
 		"clientKind": "git",
@@ -18,17 +18,17 @@
 			"recommended": true,
 			"correctness": {
 				"noUnusedVariables": {
-				  "options": {},
-				  "level": "error",
-				  "fix": "unsafe"
+					"options": {},
+					"level": "error",
+					"fix": "unsafe"
 				}
 			},
 			"style": {
 				"useFilenamingConvention": {
-					"level":"error",
+					"level": "error",
 					"options": {
 						"filenameCases": ["kebab-case"]
-					}	
+					}
 				}
 			}
 		}
@@ -37,6 +37,11 @@
 		"formatter": {
 			"quoteStyle": "double",
 			"trailingCommas": "none"
+		}
+	},
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
 		}
 	},
 	"assist": {

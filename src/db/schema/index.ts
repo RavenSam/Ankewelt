@@ -1,3 +1,8 @@
-export { commentRelations, default as comment } from "./comment";
-export { default as post, postRelations } from "./post";
-export { default as user, userRelations } from "./user";
+export { bookRelations, default as book } from "./book"
+export { chapterRelations, chapterVersionIdx, chapterVersionUnique, default as chapter } from "./chapter"
+export { chapterRelations as chapterVersionRelations, default as chapterVersion } from "./chapter_version"
+export { default as chapterGroup, groupRelations } from "./chapter-group"
+export { characterRelations, default as character } from "./character"
+export { default as location, locationRelations } from "./location"
+export { default as plot, plotRelations } from "./plot"
+export { default as user, userRelations } from "./user"
