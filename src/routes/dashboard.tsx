@@ -24,8 +24,8 @@ export const Route = createFileRoute("/dashboard")({
 
 function Dashboard() {
 	return (
-		<div className="min-h-screen p-8 font-sans">
-			<header className="flex justify-between items-start mb-8">
+		<div className="min-h-screen p-8 pt-14">
+			<header className="flex justify-between items-start mb-14">
 				<div>
 					<p className="text-muted-foreground text-sm mb-1">Tuesday, October 24</p>
 					<h1 className="text-3xl font-semibold">Good morning, E. Weaver</h1>
@@ -38,7 +38,7 @@ function Dashboard() {
 			</header>
 
 			{/* Top Stats */}
-			<div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+			<div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
 				<StatCard icon={FileText} title="TOTAL WORDS" value="142,850" change="+4,200 this week" />
 				<StatCard icon={BookCopyIcon} title="ACTIVE BOOKS" value="3" change="1 completed project" />
 				<StatCard icon={FlameIcon} title="CURRENT STREAK" value="12 Days" change="Best streak: 24 days" />
@@ -139,7 +139,7 @@ const RecentUpdates = () => (
 )
 
 const StatCard = (props: { title: string; value: string; change: string; icon: any }) => (
-	<Card className="border shadow-sm hover:border-primary">
+	<Card className="border border-transparent shadow-sm hover:border-primary transition-all duration-300">
 		<CardContent className="">
 			<div className="flex items-center mb-2">
 				<props.icon className="size-5 text-muted-foreground mr-2" />
