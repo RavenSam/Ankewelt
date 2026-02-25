@@ -9,7 +9,11 @@ const chapterGroup = sqliteTable("chapter_group", {
 		.notNull()
 		.references(() => book.id, { onDelete: "cascade" }),
 	name: text("name").notNull(),
-	position: integer("position").notNull().default(0), // order in the root list
+	collapsed: integer("collapsed", { mode: "boolean" }).notNull().default(false),
+	chapters_order: text("chapters_order", { mode: "json" })
+		.$type<string[]>()
+		.notNull()
+		.default(sql`'[]'`), // list of ids of the chapter for DnD
 	created_at: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 	updated_at: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
 })

@@ -5,6 +5,7 @@ include!(concat!(env!("OUT_DIR"), "/generated_migrations.rs"));
 pub fn run() {
     let migrations = load_migrations();
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
         .plugin(
             tauri_plugin_sql::Builder::default()
                 .add_migrations("sqlite:database.db", migrations)

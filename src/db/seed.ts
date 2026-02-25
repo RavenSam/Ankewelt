@@ -1,5 +1,4 @@
 import { eq } from "drizzle-orm"
-import { reset } from "drizzle-seed"
 import * as schema from "@/db/schema"
 import db from "./database"
 
@@ -18,17 +17,61 @@ const users = [
 				word_count: 62400,
 				goal_words: 100000,
 				is_public: true,
+				ungroupedChapters: [
+					{
+						title: "Prologue: The Last Broadcast",
+						chapterNumber: 0,
+						status: "final",
+						word_count: 640,
+						versions: [
+							{
+								version_number: 1,
+								title_snapshot: "Prologue: The Last Broadcast",
+								content:
+									"The final transmission from Earth was not a farewell. It was a weather report. Automated, indifferent, looping — a bureaucratic ghost haunting the void long after the civilization that sent it had ceased to exist.",
+								wordCount: 640,
+							},
+						],
+					},
+					{
+						title: "Interlude: Renn's Log",
+						chapterNumber: 99,
+						status: "draft",
+						word_count: 520,
+						versions: [
+							{
+								version_number: 1,
+								title_snapshot: "Interlude: Renn's Log",
+								content:
+									"Personal log, day 413. The signal is still there. I've run every diagnostic I know. The equipment is fine. The signal is real. I haven't told Yael yet.",
+								wordCount: 520,
+							},
+						],
+					},
+					{
+						title: "Epilogue [PLACEHOLDER]",
+						chapterNumber: 100,
+						status: "draft",
+						word_count: 0,
+						versions: [
+							{
+								version_number: 1,
+								title_snapshot: "Epilogue [PLACEHOLDER]",
+								content: "",
+								wordCount: 0,
+							},
+						],
+					},
+				],
 				chapterGroups: [
 					{
 						name: "Part One: Departure",
-						position: 0,
 						chapters: [
 							{
 								title: "Into the Dark",
 								chapterNumber: 1,
 								status: "final",
-								position: 0,
-								root_position: 0,
+								word_count: 2105,
 								versions: [
 									{
 										version_number: 1,
@@ -50,8 +93,7 @@ const users = [
 								title: "Fifty Thousand Souls",
 								chapterNumber: 2,
 								status: "revised",
-								position: 1,
-								root_position: 1,
+								word_count: 1650,
 								versions: [
 									{
 										version_number: 1,
@@ -62,18 +104,31 @@ const users = [
 									},
 								],
 							},
+							{
+								title: "The Weight of Command",
+								chapterNumber: 3,
+								status: "revised",
+								word_count: 1890,
+								versions: [
+									{
+										version_number: 1,
+										title_snapshot: "The Weight of Command",
+										content:
+											"Admiral Lorne called the first officers' meeting on day two. Yael sat across from him at the long steel table and said nothing while he outlined the chain of command. She had heard it before. She disagreed with it then, too.",
+										wordCount: 1890,
+									},
+								],
+							},
 						],
 					},
 					{
 						name: "Part Two: The Anomaly",
-						position: 1,
 						chapters: [
 							{
 								title: "Signal in the Static",
-								chapterNumber: 3,
+								chapterNumber: 4,
 								status: "draft",
-								position: 0,
-								root_position: 2,
+								word_count: 980,
 								versions: [
 									{
 										version_number: 1,
@@ -81,6 +136,21 @@ const users = [
 										content:
 											"Chief Engineer Renn picked up the signal on day four hundred and twelve. It wasn't random noise. It repeated in a pattern no natural phenomenon could produce.",
 										wordCount: 980,
+									},
+								],
+							},
+							{
+								title: "Course Deviation",
+								chapterNumber: 5,
+								status: "draft",
+								word_count: 1120,
+								versions: [
+									{
+										version_number: 1,
+										title_snapshot: "Course Deviation",
+										content:
+											"Yael ordered the course correction at 0300, ship time. She did not wake Admiral Lorne. By the time he discovered what she had done, the Meridian was already locked onto the signal's origin point.",
+										wordCount: 1120,
 									},
 								],
 							},
@@ -146,17 +216,47 @@ const users = [
 				word_count: 38900,
 				goal_words: 120000,
 				is_public: false,
+				ungroupedChapters: [
+					{
+						title: "Preface: A Knight's Oath",
+						chapterNumber: 0,
+						status: "final",
+						word_count: 410,
+						versions: [
+							{
+								version_number: 1,
+								title_snapshot: "Preface: A Knight's Oath",
+								content:
+									"I swear to protect the innocent, uphold the crown, and obey the order of the blade. Aldric had spoken those words at seventeen. He had believed every one of them.",
+								wordCount: 410,
+							},
+						],
+					},
+					{
+						title: "Interlude: Seraphel's Decree",
+						chapterNumber: 98,
+						status: "draft",
+						word_count: 730,
+						versions: [
+							{
+								version_number: 1,
+								title_snapshot: "Interlude: Seraphel's Decree",
+								content:
+									"The High Sorcerer signed the warrant without looking up from her desk. 'Find the girl,' she said to the shadow in the corner. 'Find what she carries. Burn everything else.'",
+								wordCount: 730,
+							},
+						],
+					},
+				],
 				chapterGroups: [
 					{
 						name: "Book One: The Fall",
-						position: 0,
 						chapters: [
 							{
 								title: "The Dishonored",
 								chapterNumber: 1,
 								status: "final",
-								position: 0,
-								root_position: 0,
+								word_count: 2300,
 								versions: [
 									{
 										version_number: 1,
@@ -171,8 +271,7 @@ const users = [
 								title: "The Road to Vethara",
 								chapterNumber: 2,
 								status: "draft",
-								position: 1,
-								root_position: 1,
+								word_count: 1750,
 								versions: [
 									{
 										version_number: 1,
@@ -180,6 +279,41 @@ const users = [
 										content:
 											"Aldric traveled light. A dull sword, a worn cloak, and enough coin for three days. The capital of the sorcerer-kings rose on the horizon like a wound that refused to heal.",
 										wordCount: 1750,
+									},
+								],
+							},
+							{
+								title: "The Thief in the Alley",
+								chapterNumber: 3,
+								status: "draft",
+								word_count: 1540,
+								versions: [
+									{
+										version_number: 1,
+										title_snapshot: "The Thief in the Alley",
+										content:
+											"She was maybe fifteen, maybe younger, and she had her hand in his coin purse before he had even turned the corner. He caught her wrist. She did not flinch. That was the first thing he noticed about Pip.",
+										wordCount: 1540,
+									},
+								],
+							},
+						],
+					},
+					{
+						name: "Book Two: The City of Glass",
+						chapters: [
+							{
+								title: "Gates of Vethara",
+								chapterNumber: 4,
+								status: "draft",
+								word_count: 1320,
+								versions: [
+									{
+										version_number: 1,
+										title_snapshot: "Gates of Vethara",
+										content:
+											"The city swallowed them whole. Aldric kept his hood up and his hand near his sword. Pip kept talking — about the towers, the market stalls, the strange purple smoke drifting from the sorcerers' quarter. She had never seen anything like it. He had. He had burned part of it once.",
+										wordCount: 1320,
 									},
 								],
 							},
@@ -260,6 +394,10 @@ export default async function seed() {
 		for (const bookData of userData.books) {
 			const bookId = crypto.randomUUID()
 
+			// Pre-generate all IDs upfront so order arrays can be set at insert time
+			const groupIds = bookData.chapterGroups.map(() => crypto.randomUUID())
+			const ungroupedIds = bookData.ungroupedChapters.map(() => crypto.randomUUID())
+
 			const [insertedBook] = await db
 				.insert(schema.book)
 				.values({
@@ -272,6 +410,8 @@ export default async function seed() {
 					word_count: bookData.word_count,
 					goal_words: bookData.goal_words,
 					is_public: bookData.is_public,
+					ungrouped_chapters_order: ungroupedIds,
+					chapters_groupes_order: groupIds,
 				})
 				.returning()
 
@@ -308,9 +448,58 @@ export default async function seed() {
 				})
 			}
 
+			// Insert ungrouped chapters (no group_id)
+			for (let ui = 0; ui < bookData.ungroupedChapters.length; ui++) {
+				const chapterData = bookData.ungroupedChapters[ui]
+				const chapterId = ungroupedIds[ui]
+
+				const [insertedChapter] = await db
+					.insert(schema.chapter)
+					.values({
+						id: chapterId,
+						book_id: insertedBook.id,
+						group_id: null,
+						title: chapterData.title,
+						chapterNumber: chapterData.chapterNumber,
+						status: chapterData.status,
+						word_count: chapterData.word_count,
+					})
+					.returning()
+
+				console.log(`    Inserted ungrouped chapter: "${insertedChapter.title}"`)
+
+				let latestVersionId: string | null = null
+
+				for (const versionData of chapterData.versions) {
+					const versionId = crypto.randomUUID()
+
+					await db.insert(schema.chapterVersion).values({
+						id: versionId,
+						chapter_id: insertedChapter.id,
+						version_number: versionData.version_number,
+						title_snapshot: versionData.title_snapshot,
+						content: versionData.content,
+						wordCount: versionData.wordCount,
+					})
+
+					latestVersionId = versionId
+				}
+
+				if (latestVersionId) {
+					await db
+						.update(schema.chapter)
+						.set({ currentVersionId: latestVersionId })
+						.where(eq(schema.chapter.id, insertedChapter.id))
+				}
+			}
+
 			// Insert chapter groups and their chapters
-			for (const groupData of bookData.chapterGroups) {
-				const groupId = crypto.randomUUID()
+			for (let gi = 0; gi < bookData.chapterGroups.length; gi++) {
+				const groupData = bookData.chapterGroups[gi]
+				const groupId = groupIds[gi]
+
+				// Pre-generate chapter IDs so we can build chapters_order upfront
+				const chapterIds = groupData.chapters.map(() => crypto.randomUUID())
 
 				const [insertedGroup] = await db
 					.insert(schema.chapterGroup)
@@ -318,12 +507,13 @@ export default async function seed() {
 						id: groupId,
 						book_id: insertedBook.id,
 						name: groupData.name,
-						position: groupData.position,
+						chapters_order: chapterIds,
 					})
 					.returning()
 
-				for (const chapterData of groupData.chapters) {
-					const chapterId = crypto.randomUUID()
+				for (let ci = 0; ci < groupData.chapters.length; ci++) {
+					const chapterData = groupData.chapters[ci]
+					const chapterId = chapterIds[ci]
 
 					const [insertedChapter] = await db
 						.insert(schema.chapter)
@@ -334,8 +524,7 @@ export default async function seed() {
 							title: chapterData.title,
 							chapterNumber: chapterData.chapterNumber,
 							status: chapterData.status,
-							position: chapterData.position,
-							root_position: chapterData.root_position,
+							word_count: chapterData.word_count,
 						})
 						.returning()
 

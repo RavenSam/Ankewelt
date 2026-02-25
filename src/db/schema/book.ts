@@ -28,6 +28,16 @@ const book = sqliteTable("book", {
 	word_count: integer("word_count").default(0).notNull(),
 	goal_words: integer("goal_words").default(100000),
 
+	ungrouped_chapters_order: text("ungrouped_chapters_order", { mode: "json" })
+		.$type<string[]>()
+		.notNull()
+		.default(sql`'[]'`), // list of ids of the ungrouped chapters for DnD
+
+	chapters_groupes_order: text("chapters_groupes_order", { mode: "json" })
+		.$type<string[]>()
+		.notNull()
+		.default(sql`'[]'`), // list of ids of the chapter groups for DnD
+
 	created_at: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 	updated_at: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
 })

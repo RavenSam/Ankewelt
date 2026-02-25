@@ -14,14 +14,12 @@ const chapter = sqliteTable("chapter", {
 	group_id: text("group_id").references(() => chapterGroup.id, {
 		onDelete: "set null", // ungrouped when group is deleted
 	}),
-	position: integer("position").notNull().default(0), // order within its group (or root if ungrouped)
-	root_position: integer("root_position"),
 
 	title: text("title").notNull(),
 	chapterNumber: integer("chapter_number").notNull(),
+	word_count: integer("word_count").notNull(),
 
 	status: text("status").default("draft"),
-	// draft | revised | final
 
 	currentVersionId: text("current_version_id"),
 

@@ -16,21 +16,22 @@ export const Route = createRootRoute({
 			return { sidebarOpen: true }
 		}
 
-		const books: NavItemType[] = await getNavbarData("1")
+		const userId = "1"
+		const navItems: NavItemType[] = await getNavbarData(userId)
 
 		const value = match.split("=")[1]
-		return { sidebarOpen: value === "true", books }
+		return { sidebarOpen: value === "true", navItems }
 	},
 
 	component: RootLayout,
 })
 
 function RootLayout() {
-	const { sidebarOpen, books } = Route.useLoaderData()
+	const { sidebarOpen, navItems } = Route.useLoaderData()
 
 	return (
 		<SidebarProvider defaultOpen={sidebarOpen}>
-			<AppSidebar variant="inset" navItems={books || []} />
+			<AppSidebar variant="inset" navItems={navItems || []} />
 
 			<SidebarInset className="overflow-hidden">
 				<div className="flex flex-1 flex-col">

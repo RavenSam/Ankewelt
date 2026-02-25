@@ -1,3 +1,5 @@
+import type { book, chapter, chapterGroup } from "@/db/schema"
+
 export type NavItemType = {
 	label: string
 	href: string
@@ -27,24 +29,11 @@ export type NavBookType = {
 	}[]
 }
 
-export type ChapterStatus = "Draft" | "Revised" | "Final" | "Outline"
+export type Chapter = typeof chapter.$inferSelect
 
-export interface Chapter {
-	id: string
-	number: number
-	title: string
-	subtitle?: string
-	wordCount: number
-	status: ChapterStatus
-	lastModified: string
-	groupId: string | null // null = ungrouped
-}
+export type Group = typeof chapterGroup.$inferSelect
 
-export interface Group {
-	id: string
-	name: string
-	collapsed: boolean
-}
+export type Book = typeof book.$inferSelect
 
 export interface ChaptersState {
 	groups: Group[]

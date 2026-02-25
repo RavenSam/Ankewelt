@@ -8,77 +8,53 @@ import { cn } from "@/lib/utils"
 import { ChapterItem } from "./chapter-item"
 
 interface GroupContainerProps {
-	group: Group
-	chapters: Chapter[]
-	wordCount: number
-	onToggleCollapse: (id: string) => void
-	isDraggingChapter: boolean
+	group: Group & { chapters: Chapter[] }
+	onToggleCollapse?: (id: string) => void
+	onUngroupChapter?: (chapterId: string) => void
 }
 
-export function GroupContainer({
-	group,
-	chapters,
-	wordCount,
-	onToggleCollapse,
-	isDraggingChapter,
-}: GroupContainerProps) {
-	// useSortable handles group-level dragging (reordering groups)
-	const {
-		attributes,
-		listeners,
-		setNodeRef: setSortableRef,
-		transform,
-		transition,
-		isDragging,
-	} = useSortable({
+export function GroupContainer({ group, onToggleCollapse, onUngroupChapter }: GroupContainerProps) {
+	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id: group.id,
-		// Disable sorting behaviour when a chapter is being dragged —
-		// we don't want the group to move when a chapter flies over it
-		disabled: isDraggingChapter,
-	})
-
-	// Separate droppable on the body so chapters can be dropped into this group.
-	// We use a distinct id `${group.id}__drop` to avoid id conflicts with useSortable.
-	const { setNodeRef: setBodyDropRef, isOver: isBodyOver } = useDroppable({
-		id: `${group.id}__drop`,
-		disabled: !isDraggingChapter,
+		data: { type: "group" },
+		animateLayoutChanges: () => false,
 	})
 
 	const style = {
-		// Use Translate (not Transform) to avoid scale/skew glitches
 		transform: CSS.Translate.toString(transform),
 		transition,
 	}
 
-	const chapterIds = chapters.map((c) => c.id)
+	const chapterIds = group.chapters.map((c) => c.id)
 
 	return (
 		<div
-			ref={setSortableRef}
+			ref={setNodeRef}
 			style={style}
-			className={cn("rounded-lg border border-border bg-card overflow-hidden", isDragging && "opacity-40 shadow-lg")}
+			className={cn(
+				"rounded-lg border border-border bg-card overflow-hidden",
+				isDragging && "opacity-50 shadow-lg ring-2 ring-primary/40",
+			)}
 		>
-			{/* ── Group header ─────────────────────────────────────────────── */}
 			<div
 				className={cn(
-					"flex items-center gap-2 px-4 py-3 bg-muted/40 border-b border-border transition-colors select-none",
-					isBodyOver && group.collapsed && "bg-primary/5 border-primary/30",
+					"flex items-center gap-2 px-4 py-3 bg-muted/40 transition-colors select-none",
+					group.collapsed ? "" : "border-b border-border",
 				)}
 			>
-				{/* Drag handle — only active when dragging groups */}
 				<button
-					{...attributes}
-					{...listeners}
+					type="button"
 					className="cursor-grab active:cursor-grabbing p-0.5 rounded text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors touch-none shrink-0"
 					aria-label="Drag group to reorder"
+					{...attributes}
+					{...listeners}
 				>
 					<GripVertical className="h-4 w-4" />
 				</button>
 
-				{/* Collapse toggle */}
 				<button
 					type="button"
-					onClick={() => onToggleCollapse(group.id)}
+					onClick={() => onToggleCollapse?.(group.id)}
 					className="flex items-center gap-2 flex-1 min-w-0 text-left"
 				>
 					{group.collapsed ? (
@@ -89,13 +65,12 @@ export function GroupContainer({
 					<span className="text-sm font-semibold text-foreground truncate">{group.name}</span>
 				</button>
 
-				{/* Stats */}
 				<div className="flex items-center gap-3 shrink-0 text-xs text-muted-foreground">
 					<span>
-						{chapters.length} {chapters.length === 1 ? "Chapter" : "Chapters"}
+						{group.chapters.length} {group.chapters.length === 1 ? "Chapter" : "Chapters"}
 					</span>
 					<span>·</span>
-					<span>{wordCount.toLocaleString()} words</span>
+					<span>{group.chapters.reduce((sum, c) => sum + c.word_count, 0)} words</span>
 				</div>
 
 				<Button variant="ghost" size="icon" className="h-7 w-7 ml-1 shrink-0">
@@ -103,56 +78,89 @@ export function GroupContainer({
 				</Button>
 			</div>
 
-			{/* ── Collapsed drop hint ──────────────────────────────────────── */}
-			{group.collapsed && isDraggingChapter && (
-				<div
-					ref={setBodyDropRef}
-					className={cn(
-						"flex items-center justify-center text-xs text-muted-foreground transition-all overflow-hidden",
-						isBodyOver ? "h-10 bg-primary/8 text-primary border-t border-primary/20" : "h-0",
-					)}
-				>
-					{isBodyOver && `Drop to add to "${group.name}"`}
-				</div>
-			)}
-
-			{/* ── Chapter list ─────────────────────────────────────────────── */}
 			{!group.collapsed && (
-				<div ref={setBodyDropRef}>
-					{/* Column headers */}
-					<div className="flex items-center gap-3 px-4 py-2 border-b border-border bg-muted/20">
-						<div className="w-5 shrink-0" />
-						<div className="flex-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">Chapter</div>
-						<div className="w-32 shrink-0 hidden sm:block text-xs font-medium text-muted-foreground uppercase tracking-wider">
-							Word Count
-						</div>
-						<div className="w-24 shrink-0 hidden md:block text-xs font-medium text-muted-foreground uppercase tracking-wider">
-							Status
-						</div>
-						<div className="w-40 shrink-0 hidden lg:block text-xs font-medium text-muted-foreground uppercase tracking-wider">
-							Last Modified
-						</div>
-						<div className="w-16 shrink-0 text-xs font-medium text-muted-foreground uppercase tracking-wider text-right">
-							Actions
-						</div>
-					</div>
-
-					<SortableContext items={chapterIds} strategy={verticalListSortingStrategy}>
-						{chapters.length === 0 ? (
-							<div
-								className={cn(
-									"px-4 py-8 text-center text-sm text-muted-foreground transition-colors",
-									isBodyOver && "bg-primary/5",
-								)}
-							>
-								Drop chapters here
-							</div>
-						) : (
-							chapters.map((chapter) => <ChapterItem key={chapter.id} chapter={chapter} />)
-						)}
-					</SortableContext>
-				</div>
+				<ChapterDropZone
+					groupId={group.id}
+					chapterIds={chapterIds}
+					chapters={group.chapters}
+					onUngroupChapter={onUngroupChapter}
+				/>
 			)}
+		</div>
+	)
+}
+
+interface ChapterDropZoneProps {
+	groupId: string
+	chapterIds: string[]
+	chapters: Chapter[]
+	onUngroupChapter?: (chapterId: string) => void
+}
+
+function ChapterDropZone({ groupId, chapterIds, chapters, onUngroupChapter }: ChapterDropZoneProps) {
+	const { setNodeRef, isOver } = useDroppable({ id: groupId })
+
+	return (
+		<div ref={setNodeRef}>
+			<div className="flex items-center gap-3 px-4 py-2 border-b border-border bg-muted/20">
+				<div className="w-5 shrink-0" />
+				<div className="flex-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">Chapter</div>
+				<div className="w-32 shrink-0 hidden sm:block text-xs font-medium text-muted-foreground uppercase tracking-wider">
+					Word Count
+				</div>
+				<div className="w-24 shrink-0 hidden md:block text-xs font-medium text-muted-foreground uppercase tracking-wider">
+					Status
+				</div>
+				<div className="w-40 shrink-0 hidden lg:block text-xs font-medium text-muted-foreground uppercase tracking-wider">
+					Last Modified
+				</div>
+				<div className="w-16 shrink-0 text-xs font-medium text-muted-foreground uppercase tracking-wider text-right">
+					Actions
+				</div>
+			</div>
+
+			<SortableContext items={chapterIds} strategy={verticalListSortingStrategy}>
+				{chapters.length === 0 ? (
+					<div
+						className={cn(
+							"px-4 py-8 text-center text-sm text-muted-foreground transition-colors",
+							isOver && "bg-primary/5",
+						)}
+					>
+						Drop chapters here
+					</div>
+				) : (
+					chapters.map((chapter) => (
+						<ChapterItem key={chapter.id} chapter={chapter} onUngroup={() => onUngroupChapter?.(chapter.id)} />
+					))
+				)}
+			</SortableContext>
+		</div>
+	)
+}
+
+// ─── Overlay variant (rendered inside <DragOverlay>) ─────────────────────────
+interface GroupContainerOverlayProps {
+	group: Group & { chapters: Chapter[] }
+}
+
+export function GroupContainerOverlay({ group }: GroupContainerOverlayProps) {
+	if (!group.collapsed) return <GroupContainer group={group} />
+
+	return (
+		<div className="rounded-lg border border-border bg-card overflow-hidden shadow-xl ring-2 ring-primary/40 cursor-grabbing">
+			<div className="flex items-center gap-2 px-4 py-3 bg-muted/40 border-b border-border select-none">
+				<GripVertical className="h-4 w-4 text-muted-foreground/60 shrink-0" />
+				<ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />
+				<span className="text-sm font-semibold text-foreground truncate">{group.name}</span>
+				<div className="flex items-center gap-3 ml-auto shrink-0 text-xs text-muted-foreground">
+					<span>
+						{group.chapters.length} {group.chapters.length === 1 ? "Chapter" : "Chapters"}
+					</span>
+					<span>·</span>
+					<span>{group.chapters.reduce((sum, c) => sum + c.word_count, 0)} words</span>
+				</div>
+			</div>
 		</div>
 	)
 }
