@@ -1,22 +1,16 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
-import {
-	BookCopyIcon,
-	CrosshairIcon,
-	FileText,
-	FlameIcon,
-	Pencil,
-	PencilLine,
-	PenIcon,
-	Plus,
-	PlusCircle,
-} from "lucide-react"
-import React from "react"
+import { Pencil, PencilLine, PenIcon, Plus, PlusCircle } from "lucide-react"
+import React, { useRef } from "react"
+import { ActivityIcon } from "@/components/ui/activity"
 import { AnimatedCircularProgressBar } from "@/components/ui/animated-circular-progress-bar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { FileTextIcon } from "@/components/ui/file-text"
+import { FlameIcon } from "@/components/ui/flame"
 import { HeatmapCalendar } from "@/components/ui/heatmap-calendar"
 import { Progress } from "@/components/ui/progress"
+import { SquareStackIcon } from "@/components/ui/square-stack"
 import { getCurrentUser } from "@/helpers/get-current-user"
 
 export const Route = createFileRoute("/dashboard")({
@@ -51,10 +45,10 @@ function Dashboard() {
 
 			{/* Top Stats */}
 			<div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
-				<StatCard icon={FileText} title="TOTAL WORDS" value="142,850" change="+4,200 this week" />
-				<StatCard icon={BookCopyIcon} title="ACTIVE BOOKS" value="3" change="1 completed project" />
+				<StatCard icon={FileTextIcon} title="TOTAL WORDS" value="142,850" change="+4,200 this week" />
+				<StatCard icon={SquareStackIcon} title="ACTIVE BOOKS" value="3" change="1 completed project" />
 				<StatCard icon={FlameIcon} title="CURRENT STREAK" value="12 Days" change="Best streak: 24 days" />
-				<StatCard icon={CrosshairIcon} title="AVG. DAILY" value="1,840" change="Words per session" />
+				<StatCard icon={ActivityIcon} title="AVG. DAILY" value="1,840" change="Words per session" />
 			</div>
 
 			<div className="grid grid-cols-12 gap-4 mb-8">
@@ -148,21 +142,32 @@ const RecentUpdates = () => (
 	</Card>
 )
 
-const StatCard = (props: { title: string; value: string; change: string; icon: any }) => (
-	<Card className="border border-transparent shadow-sm hover:border-primary transition-all duration-300">
-		<CardContent className="">
-			<div className="flex items-center mb-2">
-				<props.icon className="size-5 text-muted-foreground mr-2" />
-				<p className="text-xs font-light text-muted-foreground tracking-widest">{props.title}</p>
-			</div>
-			<h3 className="text-3xl font-bold mb-1">{props.value}</h3>
-			<p className="text-xs text-muted-foreground">
-				<span className={props.change.startsWith("+") ? "text-green-500" : ""}>{props.change.split(" ")[0]}</span>
-				{props.change.substring(props.change.indexOf(" "))}
-			</p>
-		</CardContent>
-	</Card>
-)
+const StatCard = (props: { title: string; value: string; change: string; icon: any }) => {
+	const iconRef = useRef<{
+		startAnimation: () => void
+		stopAnimation: () => void
+	}>(null)
+
+	return (
+		<Card
+			className="border border-transparent shadow-sm hover:border-primary transition-all duration-300"
+			onMouseEnter={() => iconRef.current?.startAnimation()}
+			onMouseLeave={() => iconRef.current?.stopAnimation()}
+		>
+			<CardContent>
+				<div className="flex items-center mb-2">
+					<props.icon ref={iconRef} className="text-muted-foreground mr-2" />
+					<p className="text-xs font-light text-muted-foreground tracking-widest">{props.title}</p>
+				</div>
+				<h3 className="text-3xl font-bold mb-1">{props.value}</h3>
+				<p className="text-xs text-muted-foreground">
+					<span className={props.change.startsWith("+") ? "text-green-500" : ""}>{props.change.split(" ")[0]}</span>
+					{props.change.substring(props.change.indexOf(" "))}
+				</p>
+			</CardContent>
+		</Card>
+	)
+}
 
 const ProjectCard = ({ title, genre, words, progress, color }: any) => (
 	<Card className="border-none shadow-sm overflow-hidden group cursor-pointer">
