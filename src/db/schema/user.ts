@@ -1,6 +1,7 @@
 import { relations, sql } from "drizzle-orm"
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
 import book from "./book"
+import session from "./session"
 
 const user = sqliteTable("user", {
 	id: integer("id").primaryKey().unique(),
@@ -15,6 +16,7 @@ const user = sqliteTable("user", {
 
 export const userRelations = relations(user, ({ many }) => ({
 	books: many(book),
+	sessions: many(session),
 }))
 
 export default user

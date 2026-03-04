@@ -1,6 +1,8 @@
 mod drizzle_proxy;
 include!(concat!(env!("OUT_DIR"), "/generated_migrations.rs"));
 
+mod auth;
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let migrations = load_migrations();
@@ -12,7 +14,10 @@ pub fn run() {
                 .build(),
         )
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![drizzle_proxy::run_sql])
+        .invoke_handler(tauri::generate_handler![
+            drizzle_proxy::run_sql,
+            auth::generate_session_token
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

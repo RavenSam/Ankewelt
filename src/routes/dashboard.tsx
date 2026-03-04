@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, redirect } from "@tanstack/react-router"
 import {
 	BookCopyIcon,
 	CrosshairIcon,
@@ -17,18 +17,30 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { HeatmapCalendar } from "@/components/ui/heatmap-calendar"
 import { Progress } from "@/components/ui/progress"
+import { getCurrentUser } from "@/helpers/get-current-user"
 
 export const Route = createFileRoute("/dashboard")({
+	loader: async () => {
+		const currentUser = await getCurrentUser()
+
+		if (!currentUser) {
+			throw redirect({ to: "/" })
+		}
+
+		return { currentUser }
+	},
 	component: Dashboard,
 })
 
 function Dashboard() {
+	const { currentUser } = Route.useLoaderData()
+
 	return (
 		<div className="min-h-screen p-8 pt-14">
 			<header className="flex justify-between items-start mb-14">
 				<div>
 					<p className="text-muted-foreground text-sm mb-1">Tuesday, October 24</p>
-					<h1 className="text-3xl font-semibold">Good morning, E. Weaver</h1>
+					<h1 className="text-3xl font-semibold">Good morning, {currentUser.name}</h1>
 				</div>
 				<div className="flex gap-3">
 					<Button className="gap-2 font-semibold" size={"lg"}>
@@ -46,7 +58,6 @@ function Dashboard() {
 			</div>
 
 			<div className="grid grid-cols-12 gap-4 mb-8">
-				{/* Left Column */}
 				<div className="col-span-8 space-y-4">
 					<section>
 						<div className="flex justify-between items-center mb-4">
@@ -68,7 +79,6 @@ function Dashboard() {
 					<RecentUpdates />
 				</div>
 
-				{/* Right Column / Sidebar */}
 				<div className="col-span-4 space-y-6">
 					<QuickNote />
 				</div>
