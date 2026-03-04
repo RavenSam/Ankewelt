@@ -20,6 +20,12 @@ importers:
       '@dnd-kit/utilities':
         specifier: ^3.2.2
         version: 3.2.2(react@19.2.4)
+      '@fontsource/space-grotesk':
+        specifier: ^5.2.10
+        version: 5.2.10
+      '@fontsource/space-mono':
+        specifier: ^5.2.9
+        version: 5.2.9
       '@libsql/client':
         specifier: ^0.17.0
         version: 0.17.0
@@ -850,6 +856,12 @@ packages:
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+
+  '@fontsource/space-grotesk@5.2.10':
+    resolution: {integrity: sha512-XNXEbT74OIITPqw2H6HXwPDp85fy43uxfBwFR5PU+9sLnjuLj12KlhVM9nZVN6q6dlKjkuN8JisW/OBxwxgUew==}
+
+  '@fontsource/space-mono@5.2.9':
+    resolution: {integrity: sha512-b61faFOHEISQ/pD25G+cfGY9o/WW6lRv6hBQQfpWvEJ4y1V+S4gmth95EVyBE2VL3qDYHeVQ8nBzrplzdXTDDg==}
 
   '@hono/node-server@1.19.9':
     resolution: {integrity: sha512-vHL6w3ecZsky+8P5MD+eFfaGTyCeOHUIFYMGpQGbrBTSmNNoxv0if69rEZ5giu36weC5saFuznL411gRX7bJDw==}
@@ -4571,6 +4583,10 @@ snapshots:
       react-dom: 19.2.4(react@19.2.4)
 
   '@floating-ui/utils@0.2.10': {}
+
+  '@fontsource/space-grotesk@5.2.10': {}
+
+  '@fontsource/space-mono@5.2.9': {}
 
   '@hono/node-server@1.19.9(hono@4.12.0)':
     dependencies:

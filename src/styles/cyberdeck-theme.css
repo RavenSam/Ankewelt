@@ -1,0 +1,1091 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CYBERDECK THEME  —  CyberDeck v2.6 // ACTIVE
+   Core design language for high-performance cybernetic interfaces.
+   High contrast, sharp geometries, and neon accents.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Keyframe Animations ───────────────────────────────────────────────── */
+@keyframes cyberdeck-pulse-cyan {
+	0%,
+	100% {
+		box-shadow:
+			0 0 6px 0 oklch(0.82 0.145 205 / 0.5),
+			0 0 14px 0 oklch(0.82 0.145 205 / 0.25);
+	}
+	50% {
+		box-shadow:
+			0 0 12px 2px oklch(0.82 0.145 205 / 0.8),
+			0 0 28px 4px oklch(0.82 0.145 205 / 0.4);
+	}
+}
+@keyframes cyberdeck-pulse-dot {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.25;
+	}
+}
+@keyframes cyberdeck-skeleton {
+	0% {
+		background-position: -200% 0;
+	}
+	100% {
+		background-position: 200% 0;
+	}
+}
+@keyframes cyberdeck-glow-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME TOKENS
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck {
+	/* ── Backgrounds ─────────────────────────────────────────────────────── */
+	--background: oklch(0.083 0.018 220);
+	--foreground: oklch(0.91 0.038 197);
+
+	/* ── Card & Popover ──────────────────────────────────────────────────── */
+	--card: oklch(0.108 0.02 217);
+	--card-foreground: oklch(0.91 0.038 197);
+	--popover: oklch(0.1 0.02 218);
+	--popover-foreground: oklch(0.91 0.038 197);
+
+	/* ── Primary — Electric Cyan  #00DCFF ───────────────────────────────── */
+	--primary: oklch(0.81 0.148 205);
+	--primary-foreground: oklch(0.07 0.018 220);
+
+	/* ── Secondary ───────────────────────────────────────────────────────── */
+	--secondary: oklch(0.13 0.022 215);
+	--secondary-foreground: oklch(0.7 0.085 197);
+
+	/* ── Muted ───────────────────────────────────────────────────────────── */
+	--muted: oklch(0.145 0.018 215);
+	--muted-foreground: oklch(0.48 0.04 205);
+
+	/* ── Accent — Hot Pink  #FF00FF ─────────────────────────────────────── */
+	--accent: oklch(0.7 0.31 315);
+	--accent-foreground: oklch(0.97 0.01 315);
+
+	/* ── Destructive — Alert Red  #FF2222 ───────────────────────────────── */
+	--destructive: oklch(0.62 0.23 25);
+	--destructive-foreground: oklch(0.97 0.02 25);
+
+	/* ── Borders & Inputs ────────────────────────────────────────────────── */
+	--border: oklch(0.22 0.042 210);
+	--input: oklch(0.12 0.022 215);
+	--ring: oklch(0.81 0.148 205);
+
+	/* ── Chart Colors ────────────────────────────────────────────────────── */
+	--chart-1: oklch(0.81 0.148 205);
+	--chart-2: oklch(0.7 0.31 315);
+	--chart-3: oklch(0.93 0.24 130);
+	--chart-4: oklch(0.62 0.23 25);
+	--chart-5: oklch(0.74 0.185 260);
+
+	/* ── Sidebar ─────────────────────────────────────────────────────────── */
+	--sidebar: oklch(0.068 0.016 220);
+	--sidebar-foreground: oklch(0.84 0.042 197);
+	--sidebar-primary: oklch(0.81 0.148 205);
+	--sidebar-primary-foreground: oklch(0.07 0.018 220);
+	--sidebar-accent: oklch(0.115 0.022 215);
+	--sidebar-accent-foreground: oklch(0.7 0.085 197);
+	--sidebar-border: oklch(0.18 0.032 210);
+	--sidebar-ring: oklch(0.81 0.148 205);
+
+	/* ── Extended Brand Tokens ───────────────────────────────────────────── */
+	--cyberdeck-cyan: oklch(0.81 0.148 205);
+	--cyberdeck-pink: oklch(0.7 0.31 315);
+	--cyberdeck-green: oklch(0.93 0.24 130);
+	--cyberdeck-red: oklch(0.62 0.23 25);
+	--cyberdeck-amber: oklch(0.82 0.165 75);
+	--cyberdeck-dim: oklch(0.32 0.03 210);
+
+	/* ── Chamfer (diagonal corner cut) sizes ─────────────────────────────── */
+	--chamfer-sm: 6px;
+	--chamfer-md: 10px;
+	--chamfer-lg: 14px;
+
+	/* ── Glow shorthands ─────────────────────────────────────────────────── */
+	--glow-cyan-sm: 0 0 8px 0 oklch(0.81 0.148 205 / 0.55);
+	--glow-cyan-md: 0 0 16px 2px oklch(0.81 0.148 205 / 0.45);
+	--glow-cyan-lg: 0 0 32px 4px oklch(0.81 0.148 205 / 0.55);
+	--glow-pink-sm: 0 0 8px 0 oklch(0.7 0.31 315 / 0.55);
+	--glow-pink-md: 0 0 16px 2px oklch(0.7 0.31 315 / 0.45);
+	--glow-red-sm: 0 0 8px 0 oklch(0.62 0.23 25 / 0.6);
+	--glow-amber-sm: 0 0 8px 0 oklch(0.82 0.165 75 / 0.55);
+
+	/* ── Typography ──────────────────────────────────────────────────────── */
+	--font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+	--font-serif: "Space Grotesk", ui-serif, serif;
+	--font-mono: "Space Mono", "JetBrains Mono", ui-monospace, monospace;
+
+	/* ── Shape ───────────────────────────────────────────────────────────── */
+	--radius: 0.125rem;
+
+	/* ── Shadows ─────────────────────────────────────────────────────────── */
+	--shadow-color: #00dcff;
+	--shadow-opacity: 0.18;
+	--shadow-x: 0;
+	--shadow-y: 0;
+	--shadow-blur: 10px;
+	--shadow-spread: 0px;
+
+	--shadow-2xs: 0 0 4px 0 oklch(0.81 0.148 205 / 0.1);
+	--shadow-xs: 0 0 8px 0 oklch(0.81 0.148 205 / 0.18);
+	--shadow-sm: 0 0 10px 0 oklch(0.81 0.148 205 / 0.22), 0 1px 3px -1px oklch(0 0 0 / 0.9);
+	--shadow: 0 0 14px 0 oklch(0.81 0.148 205 / 0.26), 0 2px 5px -1px oklch(0 0 0 / 0.9);
+	--shadow-md: 0 0 20px 2px oklch(0.81 0.148 205 / 0.3), 0 4px 8px -2px oklch(0 0 0 / 0.9);
+	--shadow-lg: 0 0 30px 4px oklch(0.81 0.148 205 / 0.36), 0 8px 16px -4px oklch(0 0 0 / 0.9);
+	--shadow-xl: 0 0 44px 6px oklch(0.81 0.148 205 / 0.42), 0 16px 24px -8px oklch(0 0 0 / 0.9);
+	--shadow-2xl: 0 0 64px 8px oklch(0.81 0.148 205 / 0.6);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck,
+html.cyberdeck body {
+	background-color: var(--background);
+	color: var(--foreground);
+	font-family: var(--font-sans);
+	font-size: 0.875rem;
+	line-height: 1.6;
+	letter-spacing: 0.01em;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CLIP-PATH UTILITIES — chamfered corners
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Bottom-right chamfer */
+html.cyberdeck .chamfer-br-sm {
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--chamfer-sm)), calc(100% - var(--chamfer-sm)) 100%, 0 100%);
+}
+html.cyberdeck .chamfer-br {
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--chamfer-md)), calc(100% - var(--chamfer-md)) 100%, 0 100%);
+}
+html.cyberdeck .chamfer-br-lg {
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--chamfer-lg)), calc(100% - var(--chamfer-lg)) 100%, 0 100%);
+}
+/* Top-left chamfer */
+html.cyberdeck .chamfer-tl {
+	clip-path: polygon(var(--chamfer-md) 0, 100% 0, 100% 100%, 0 100%, 0 var(--chamfer-md));
+}
+/* Full quad chamfer */
+html.cyberdeck .chamfer-all {
+	clip-path: polygon(
+		var(--chamfer-sm) 0,
+		calc(100% - var(--chamfer-sm)) 0,
+		100% var(--chamfer-sm),
+		100% calc(100% - var(--chamfer-sm)),
+		calc(100% - var(--chamfer-sm)) 100%,
+		var(--chamfer-sm) 100%,
+		0 calc(100% - var(--chamfer-sm)),
+		0 var(--chamfer-sm)
+	);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck h1,
+html.cyberdeck h2,
+html.cyberdeck h3,
+html.cyberdeck h4,
+html.cyberdeck h5,
+html.cyberdeck h6 {
+	font-family: var(--font-sans);
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--foreground);
+	line-height: 1.15;
+}
+
+html.cyberdeck h1 {
+	font-size: 2.25rem;
+}
+html.cyberdeck h2 {
+	font-size: 1.625rem;
+}
+html.cyberdeck h3 {
+	font-size: 1.25rem;
+}
+html.cyberdeck h4 {
+	font-size: 1rem;
+}
+
+html.cyberdeck .text-eyebrow {
+	font-size: 0.625rem;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--cyberdeck-cyan);
+	font-family: var(--font-mono);
+	opacity: 0.75;
+}
+html.cyberdeck .text-section-label {
+	font-size: 0.7rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--cyberdeck-cyan);
+	font-family: var(--font-mono);
+	font-weight: 700;
+}
+
+html.cyberdeck code,
+html.cyberdeck kbd {
+	font-family: var(--font-mono);
+	font-size: 0.8125em;
+	color: var(--cyberdeck-cyan);
+	background: oklch(0.81 0.148 205 / 0.1);
+	padding: 0.1em 0.3em;
+}
+
+html.cyberdeck pre {
+	font-family: var(--font-mono);
+	font-size: 0.8125rem;
+	background: oklch(0.07 0.015 220);
+	border: 1px solid var(--border);
+	border-left: 2px solid var(--cyberdeck-cyan);
+	padding: 1rem 1.25rem;
+	overflow-x: auto;
+	color: oklch(0.75 0.12 130);
+	line-height: 1.8;
+}
+
+html.cyberdeck a {
+	color: var(--cyberdeck-cyan);
+	text-decoration: none;
+	transition: text-shadow 0.15s;
+}
+html.cyberdeck a:hover {
+	text-shadow: 0 0 10px var(--cyberdeck-cyan);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BUTTON
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Common base — applied via [data-slot="button"] which shadcn uses */
+html.cyberdeck [data-slot="button"] {
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	border-radius: 0;
+	cursor: pointer;
+	position: relative;
+	transition:
+		background 0.15s,
+		box-shadow 0.15s,
+		color 0.15s,
+		opacity 0.15s;
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+	outline: none;
+}
+
+/* ── Primary — filled cyan ─────────────────────────────────────────────── */
+html.cyberdeck [data-slot="button"][data-variant="default"],
+html.cyberdeck [data-slot="button"]:not([data-variant]) {
+	background: var(--cyberdeck-cyan);
+	color: oklch(0.07 0.018 220);
+	border: none;
+	box-shadow: var(--glow-cyan-sm);
+}
+html.cyberdeck [data-slot="button"][data-variant="default"]:hover,
+html.cyberdeck [data-slot="button"]:not([data-variant]):hover {
+	background: oklch(0.91 0.14 205);
+	box-shadow: var(--glow-cyan-md);
+}
+html.cyberdeck [data-slot="button"][data-variant="default"]:focus-visible,
+html.cyberdeck [data-slot="button"]:not([data-variant]):focus-visible {
+	box-shadow:
+		0 0 0 2px var(--background),
+		var(--glow-cyan-md);
+}
+html.cyberdeck [data-slot="button"][data-variant="default"]:disabled,
+html.cyberdeck [data-slot="button"]:not([data-variant]):disabled {
+	background: oklch(0.22 0.025 215);
+	color: oklch(0.38 0.03 210);
+	box-shadow: none;
+	cursor: not-allowed;
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+}
+
+/* ── Secondary — hot pink outline ─────────────────────────────────────── */
+html.cyberdeck [data-slot="button"][data-variant="secondary"] {
+	background: transparent;
+	color: var(--cyberdeck-pink);
+	border: 1px solid var(--cyberdeck-pink);
+	box-shadow: var(--glow-pink-sm);
+}
+html.cyberdeck [data-slot="button"][data-variant="secondary"]:hover {
+	background: oklch(0.7 0.31 315 / 0.14);
+	box-shadow: var(--glow-pink-md);
+}
+html.cyberdeck [data-slot="button"][data-variant="secondary"]:disabled {
+	border-color: oklch(0.3 0.06 315 / 0.4);
+	color: oklch(0.35 0.06 315);
+	box-shadow: none;
+	cursor: not-allowed;
+}
+
+/* ── Outline ──────────────────────────────────────────────────────────── */
+html.cyberdeck [data-slot="button"][data-variant="outline"] {
+	background: transparent;
+	color: var(--foreground);
+	border: 1px solid var(--border);
+	box-shadow: none;
+}
+html.cyberdeck [data-slot="button"][data-variant="outline"]:hover {
+	border-color: var(--cyberdeck-cyan);
+	color: var(--cyberdeck-cyan);
+	box-shadow: var(--glow-cyan-sm);
+}
+
+/* ── Destructive ─────────────────────────────────────────────────────── */
+html.cyberdeck [data-slot="button"][data-variant="destructive"] {
+	background: var(--cyberdeck-red);
+	color: #fff;
+	border: none;
+	box-shadow: var(--glow-red-sm);
+}
+html.cyberdeck [data-slot="button"][data-variant="destructive"]:hover {
+	background: oklch(0.72 0.23 25);
+	box-shadow: 0 0 18px 2px oklch(0.62 0.23 25 / 0.7);
+}
+
+/* ── Ghost ────────────────────────────────────────────────────────────── */
+html.cyberdeck [data-slot="button"][data-variant="ghost"] {
+	background: transparent;
+	color: var(--cyberdeck-cyan);
+	border: none;
+	box-shadow: none;
+	clip-path: none;
+	letter-spacing: 0.1em;
+}
+html.cyberdeck [data-slot="button"][data-variant="ghost"]:hover {
+	color: oklch(0.95 0.14 205);
+	text-shadow: 0 0 10px var(--cyberdeck-cyan);
+	background: oklch(0.81 0.148 205 / 0.07);
+}
+html.cyberdeck [data-slot="button"][data-variant="ghost"]:disabled {
+	color: oklch(0.32 0.028 210);
+	cursor: not-allowed;
+}
+
+/* ── Link ─────────────────────────────────────────────────────────────── */
+html.cyberdeck [data-slot="button"][data-variant="link"] {
+	background: transparent;
+	border: none;
+	color: var(--cyberdeck-cyan);
+	text-decoration: underline;
+	text-decoration-color: oklch(0.81 0.148 205 / 0.4);
+	clip-path: none;
+}
+html.cyberdeck [data-slot="button"][data-variant="link"]:hover {
+	text-decoration-color: var(--cyberdeck-cyan);
+	text-shadow: 0 0 8px var(--cyberdeck-cyan);
+}
+
+/* ── Sizes ────────────────────────────────────────────────────────────── */
+html.cyberdeck [data-slot="button"][data-size="sm"] {
+	padding: 0.3rem 0.75rem;
+	font-size: 0.68rem;
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+}
+html.cyberdeck [data-slot="button"][data-size="lg"] {
+	padding: 0.6rem 1.5rem;
+	font-size: 0.8rem;
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+}
+html.cyberdeck [data-slot="button"][data-size="icon"] {
+	width: 2.25rem;
+	height: 2.25rem;
+	padding: 0;
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CARD
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="card"] {
+	background: var(--card);
+	color: var(--card-foreground);
+	border: 1px solid var(--border);
+	border-radius: 0;
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--chamfer-md)), calc(100% - var(--chamfer-md)) 100%, 0 100%);
+	padding: 1.25rem;
+	position: relative;
+	box-shadow: inset 0 0 24px 0 oklch(0.81 0.148 205 / 0.04);
+	transition:
+		box-shadow 0.2s,
+		border-color 0.2s;
+}
+
+/* Top-left corner accent tick */
+html.cyberdeck [data-slot="card"]::before {
+	content: "";
+	position: absolute;
+	top: -1px;
+	left: -1px;
+	width: 10px;
+	height: 10px;
+	border-top: 2px solid var(--cyberdeck-cyan);
+	border-left: 2px solid var(--cyberdeck-cyan);
+	opacity: 0.55;
+	pointer-events: none;
+}
+
+html.cyberdeck [data-slot="card"]:hover {
+	border-color: oklch(0.34 0.06 210);
+	box-shadow:
+		var(--glow-cyan-sm),
+		inset 0 0 28px 0 oklch(0.81 0.148 205 / 0.06);
+}
+
+/* Live / Active card */
+html.cyberdeck [data-slot="card"][data-variant="live"] {
+	border-color: var(--cyberdeck-cyan);
+	box-shadow:
+		var(--glow-cyan-sm),
+		inset 0 0 32px 0 oklch(0.81 0.148 205 / 0.08);
+	animation: cyberdeck-pulse-cyan 2.8s ease-in-out infinite;
+}
+html.cyberdeck [data-slot="card"][data-variant="live"]::before {
+	opacity: 1;
+}
+
+/* Alert card (amber) */
+html.cyberdeck [data-slot="card"][data-variant="alert"] {
+	border-color: var(--cyberdeck-amber);
+	box-shadow:
+		var(--glow-amber-sm),
+		inset 0 0 24px 0 oklch(0.82 0.165 75 / 0.06);
+}
+html.cyberdeck [data-slot="card"][data-variant="alert"]::before {
+	border-color: var(--cyberdeck-amber);
+	opacity: 1;
+}
+
+/* Critical card (red) */
+html.cyberdeck [data-slot="card"][data-variant="critical"] {
+	border-color: var(--cyberdeck-red);
+	box-shadow:
+		var(--glow-red-sm),
+		inset 0 0 24px 0 oklch(0.62 0.23 25 / 0.07);
+}
+html.cyberdeck [data-slot="card"][data-variant="critical"]::before {
+	border-color: var(--cyberdeck-red);
+	opacity: 1;
+}
+
+html.cyberdeck [data-slot="card-header"] {
+	padding-bottom: 0.75rem;
+	border-bottom: 1px solid var(--border);
+	margin-bottom: 0.75rem;
+}
+html.cyberdeck [data-slot="card-title"] {
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+html.cyberdeck [data-slot="card-description"] {
+	font-size: 0.75rem;
+	color: var(--muted-foreground);
+	margin-top: 0.25rem;
+	line-height: 1.5;
+}
+html.cyberdeck [data-slot="card-footer"] {
+	padding-top: 0.75rem;
+	border-top: 1px solid var(--border);
+	margin-top: 0.75rem;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ELEVATION LEVELS
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck .elevation-1 {
+	border: 1px solid oklch(0.18 0.025 215);
+	box-shadow: inset 0 0 12px 0 oklch(0.81 0.148 205 / 0.04);
+}
+html.cyberdeck .elevation-2 {
+	border: 1px solid oklch(0.3 0.05 210);
+	box-shadow:
+		0 0 8px 0 oklch(0.81 0.148 205 / 0.2),
+		inset 0 0 14px 0 oklch(0.81 0.148 205 / 0.05);
+}
+html.cyberdeck .elevation-3 {
+	border: 1px solid var(--cyberdeck-amber);
+	box-shadow:
+		0 0 16px 2px oklch(0.82 0.165 75 / 0.4),
+		inset 0 0 14px 0 oklch(0.82 0.165 75 / 0.07);
+}
+html.cyberdeck .elevation-4 {
+	border: 1px solid var(--cyberdeck-cyan);
+	box-shadow:
+		var(--glow-cyan-lg),
+		inset 0 0 32px 0 oklch(0.81 0.148 205 / 0.12);
+	animation: cyberdeck-pulse-cyan 2.4s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   INPUT / TEXTAREA
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="input"],
+html.cyberdeck [data-slot="textarea"] {
+	background: var(--input);
+	border: 1px solid var(--border);
+	border-radius: 0;
+	color: var(--foreground);
+	font-family: var(--font-mono);
+	font-size: 0.8125rem;
+	padding: 0.45rem 0.75rem;
+	outline: none;
+	transition:
+		border-color 0.15s,
+		box-shadow 0.15s;
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+	caret-color: var(--cyberdeck-cyan);
+	width: 100%;
+}
+html.cyberdeck [data-slot="input"]::placeholder,
+html.cyberdeck [data-slot="textarea"]::placeholder {
+	color: var(--muted-foreground);
+	opacity: 0.6;
+}
+html.cyberdeck [data-slot="input"]:focus,
+html.cyberdeck [data-slot="textarea"]:focus {
+	border-color: var(--cyberdeck-cyan);
+	box-shadow:
+		var(--glow-cyan-sm),
+		inset 0 0 0 1px oklch(0.81 0.148 205 / 0.12);
+}
+html.cyberdeck [data-slot="input"]:disabled,
+html.cyberdeck [data-slot="textarea"]:disabled {
+	opacity: 0.35;
+	cursor: not-allowed;
+}
+
+/* ── Label ─────────────────────────────────────────────────────────────── */
+html.cyberdeck [data-slot="label"] {
+	font-size: 0.65rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--cyberdeck-cyan);
+	font-family: var(--font-mono);
+	display: block;
+	margin-bottom: 0.35rem;
+	opacity: 0.8;
+}
+
+/* ── Select ────────────────────────────────────────────────────────────── */
+html.cyberdeck [data-slot="select-trigger"] {
+	background: var(--input);
+	border: 1px solid var(--border);
+	border-radius: 0;
+	font-family: var(--font-mono);
+	font-size: 0.8rem;
+	color: var(--foreground);
+	padding: 0.45rem 0.75rem;
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+	cursor: pointer;
+	transition:
+		border-color 0.15s,
+		box-shadow 0.15s;
+}
+html.cyberdeck [data-slot="select-trigger"]:focus {
+	border-color: var(--cyberdeck-cyan);
+	box-shadow: var(--glow-cyan-sm);
+	outline: none;
+}
+html.cyberdeck [data-slot="select-content"] {
+	background: var(--popover);
+	border: 1px solid var(--border);
+	border-radius: 0;
+	box-shadow: var(--shadow-lg);
+	padding: 0.25rem 0;
+	animation: cyberdeck-glow-in 0.15s ease-out;
+}
+html.cyberdeck [data-slot="select-item"] {
+	font-family: var(--font-mono);
+	font-size: 0.78rem;
+	color: var(--foreground);
+	padding: 0.4rem 0.85rem;
+	cursor: pointer;
+	transition:
+		background 0.1s,
+		color 0.1s;
+}
+html.cyberdeck [data-slot="select-item"]:hover,
+html.cyberdeck [data-slot="select-item"][data-highlighted="true"] {
+	background: oklch(0.81 0.148 205 / 0.12);
+	color: var(--cyberdeck-cyan);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BADGE
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="badge"] {
+	font-family: var(--font-mono);
+	font-size: 0.6rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	border-radius: 0;
+	padding: 0.15rem 0.5rem;
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%);
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+}
+
+/* Default = cyan */
+html.cyberdeck [data-slot="badge"][data-variant="default"],
+html.cyberdeck [data-slot="badge"]:not([data-variant]) {
+	background: oklch(0.81 0.148 205 / 0.15);
+	color: var(--cyberdeck-cyan);
+	border: 1px solid oklch(0.81 0.148 205 / 0.4);
+}
+/* Secondary = pink */
+html.cyberdeck [data-slot="badge"][data-variant="secondary"] {
+	background: oklch(0.7 0.31 315 / 0.12);
+	color: var(--cyberdeck-pink);
+	border: 1px solid oklch(0.7 0.31 315 / 0.4);
+}
+/* Destructive = red */
+html.cyberdeck [data-slot="badge"][data-variant="destructive"] {
+	background: oklch(0.62 0.23 25 / 0.15);
+	color: var(--cyberdeck-red);
+	border: 1px solid oklch(0.62 0.23 25 / 0.4);
+}
+/* Outline */
+html.cyberdeck [data-slot="badge"][data-variant="outline"] {
+	background: transparent;
+	color: var(--muted-foreground);
+	border: 1px solid var(--border);
+}
+
+/* Pulsing dot on default badges */
+html.cyberdeck [data-slot="badge"][data-variant="default"]::before,
+html.cyberdeck [data-slot="badge"]:not([data-variant])::before {
+	content: "";
+	display: inline-block;
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: var(--cyberdeck-cyan);
+	animation: cyberdeck-pulse-dot 1.6s ease-in-out infinite;
+	flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABS
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="tabs-list"] {
+	background: transparent;
+	border-bottom: 1px solid var(--border);
+	border-radius: 0;
+	padding: 0;
+	display: flex;
+	gap: 0;
+	height: auto;
+}
+html.cyberdeck [data-slot="tabs-trigger"] {
+	font-family: var(--font-mono);
+	font-size: 0.65rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--muted-foreground);
+	background: transparent;
+	border: none;
+	border-bottom: 2px solid transparent;
+	border-radius: 0;
+	padding: 0.5rem 1rem;
+	margin-bottom: -1px;
+	cursor: pointer;
+	transition:
+		color 0.15s,
+		border-color 0.15s;
+}
+html.cyberdeck [data-slot="tabs-trigger"]:hover {
+	color: var(--foreground);
+}
+html.cyberdeck [data-slot="tabs-trigger"][data-state="active"] {
+	color: var(--cyberdeck-cyan);
+	border-bottom-color: var(--cyberdeck-cyan);
+	text-shadow: 0 0 10px oklch(0.81 0.148 205 / 0.5);
+	background: transparent;
+}
+html.cyberdeck [data-slot="tabs-content"] {
+	padding: 1.25rem 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DIALOG / MODAL
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="dialog-overlay"] {
+	background: oklch(0 0 0 / 0.75);
+	backdrop-filter: blur(2px);
+}
+html.cyberdeck [data-slot="dialog-content"] {
+	background: var(--card);
+	border: 1px solid var(--cyberdeck-cyan);
+	border-radius: 0;
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--chamfer-lg)), calc(100% - var(--chamfer-lg)) 100%, 0 100%);
+	box-shadow:
+		var(--glow-cyan-md),
+		0 24px 48px -12px oklch(0 0 0 / 0.95);
+	padding: 0;
+	overflow: hidden;
+	animation: cyberdeck-glow-in 0.2s ease-out;
+}
+html.cyberdeck [data-slot="dialog-header"] {
+	background: oklch(0.81 0.148 205 / 0.1);
+	border-bottom: 1px solid var(--cyberdeck-cyan);
+	padding: 0.75rem 1.25rem;
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+html.cyberdeck [data-slot="dialog-title"] {
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--cyberdeck-cyan);
+	margin: 0;
+}
+html.cyberdeck [data-slot="dialog-description"] {
+	color: var(--cyberdeck-red);
+	font-family: var(--font-mono);
+	font-size: 0.65rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+html.cyberdeck [data-slot="dialog-body"],
+html.cyberdeck [data-slot="dialog-content"] > div {
+	padding: 1rem 1.25rem;
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	color: var(--foreground);
+	line-height: 1.8;
+}
+html.cyberdeck [data-slot="dialog-footer"] {
+	padding: 0.75rem 1.25rem;
+	border-top: 1px solid var(--border);
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.6rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ALERT
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="alert"] {
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-left: 3px solid var(--cyberdeck-cyan);
+	border-radius: 0;
+	padding: 0.85rem 1rem;
+	font-size: 0.8rem;
+	display: grid;
+	gap: 0.25rem;
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--chamfer-sm)), calc(100% - var(--chamfer-sm)) 100%, 0 100%);
+}
+html.cyberdeck [data-slot="alert"][data-variant="destructive"] {
+	border-left-color: var(--cyberdeck-red);
+	box-shadow: var(--glow-red-sm);
+}
+html.cyberdeck [data-slot="alert-title"] {
+	font-family: var(--font-mono);
+	font-size: 0.7rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--cyberdeck-cyan);
+}
+html.cyberdeck [data-slot="alert"][data-variant="destructive"] [data-slot="alert-title"] {
+	color: var(--cyberdeck-red);
+}
+html.cyberdeck [data-slot="alert-description"] {
+	font-size: 0.75rem;
+	color: var(--muted-foreground);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SEPARATOR
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="separator"] {
+	background: var(--border);
+	border: none;
+	position: relative;
+}
+html.cyberdeck [data-slot="separator"][data-orientation="horizontal"] {
+	height: 1px;
+	width: 100%;
+}
+html.cyberdeck [data-slot="separator"]::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 24px;
+	height: 100%;
+	background: var(--cyberdeck-cyan);
+	box-shadow: var(--glow-cyan-sm);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SWITCH
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="switch"] {
+	background: var(--muted);
+	border: 1px solid var(--border);
+	border-radius: 99px;
+	transition:
+		background 0.2s,
+		box-shadow 0.2s;
+}
+html.cyberdeck [data-slot="switch"][data-state="checked"] {
+	background: var(--cyberdeck-cyan);
+	border-color: var(--cyberdeck-cyan);
+	box-shadow: var(--glow-cyan-sm);
+}
+html.cyberdeck [data-slot="switch-thumb"] {
+	background: var(--foreground);
+	border-radius: 99px;
+	box-shadow: none;
+	transition: transform 0.2s;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CHECKBOX
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="checkbox"] {
+	background: var(--input);
+	border: 1px solid var(--border);
+	border-radius: 0;
+	transition:
+		background 0.15s,
+		border-color 0.15s,
+		box-shadow 0.15s;
+}
+html.cyberdeck [data-slot="checkbox"][data-state="checked"] {
+	background: var(--cyberdeck-cyan);
+	border-color: var(--cyberdeck-cyan);
+	box-shadow: var(--glow-cyan-sm);
+	color: oklch(0.07 0.018 220);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PROGRESS
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="progress"] {
+	background: oklch(0.16 0.02 215);
+	border: 1px solid var(--border);
+	border-radius: 0;
+	height: 4px;
+}
+html.cyberdeck [data-slot="progress-indicator"] {
+	background: var(--cyberdeck-cyan);
+	height: 100%;
+	border-radius: 0;
+	box-shadow: var(--glow-cyan-sm);
+	transition: width 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOOLTIP
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="tooltip-content"] {
+	background: oklch(0.1 0.022 220);
+	border: 1px solid var(--cyberdeck-cyan);
+	border-radius: 0;
+	color: var(--cyberdeck-cyan);
+	font-family: var(--font-mono);
+	font-size: 0.68rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	padding: 0.3rem 0.65rem;
+	box-shadow: var(--glow-cyan-sm);
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SKELETON
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="skeleton"] {
+	background: linear-gradient(90deg, oklch(0.14 0.02 215) 25%, oklch(0.2 0.03 210) 50%, oklch(0.14 0.02 215) 75%);
+	background-size: 200% 100%;
+	animation: cyberdeck-skeleton 1.8s linear infinite;
+	border-radius: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABLE
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck [data-slot="table"] {
+	width: 100%;
+	border-collapse: collapse;
+	font-family: var(--font-mono);
+	font-size: 0.78rem;
+}
+html.cyberdeck [data-slot="table-header"] tr {
+	border-bottom: 1px solid var(--cyberdeck-cyan);
+}
+html.cyberdeck [data-slot="table-head"] {
+	font-size: 0.62rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--cyberdeck-cyan);
+	font-weight: 700;
+	padding: 0.5rem 0.75rem;
+	text-align: left;
+	opacity: 0.75;
+}
+html.cyberdeck [data-slot="table-cell"] {
+	padding: 0.5rem 0.75rem;
+	border-bottom: 1px solid var(--border);
+	color: var(--foreground);
+}
+html.cyberdeck [data-slot="table-row"]:hover [data-slot="table-cell"] {
+	background: oklch(0.81 0.148 205 / 0.04);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck ::-webkit-scrollbar {
+	width: 4px;
+	height: 4px;
+}
+html.cyberdeck ::-webkit-scrollbar-track {
+	background: oklch(0.1 0.018 220);
+}
+html.cyberdeck ::-webkit-scrollbar-thumb {
+	background: oklch(0.81 0.148 205 / 0.35);
+	border-radius: 0;
+}
+html.cyberdeck ::-webkit-scrollbar-thumb:hover {
+	background: oklch(0.81 0.148 205 / 0.65);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TEXT SELECTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck ::selection {
+	background: oklch(0.81 0.148 205 / 0.28);
+	color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STATUS INDICATOR UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck .status-indicator {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-family: var(--font-mono);
+	font-size: 0.65rem;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	font-weight: 700;
+}
+html.cyberdeck .status-indicator::before {
+	content: "";
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: currentColor;
+	flex-shrink: 0;
+}
+html.cyberdeck .status-active {
+	color: var(--cyberdeck-cyan);
+}
+html.cyberdeck .status-active::before {
+	animation: cyberdeck-pulse-dot 1.6s ease-in-out infinite;
+	box-shadow: 0 0 6px 0 var(--cyberdeck-cyan);
+}
+html.cyberdeck .status-ok {
+	color: var(--cyberdeck-green);
+}
+html.cyberdeck .status-warning {
+	color: var(--cyberdeck-amber);
+}
+html.cyberdeck .status-critical {
+	color: var(--cyberdeck-red);
+}
+html.cyberdeck .status-critical::before {
+	animation: cyberdeck-pulse-dot 0.8s ease-in-out infinite;
+	box-shadow: 0 0 6px 0 var(--cyberdeck-red);
+}
+html.cyberdeck .status-offline {
+	color: var(--muted-foreground);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TERMINAL WIDGET
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.cyberdeck .terminal {
+	background: oklch(0.065 0.015 220);
+	border: 1px solid var(--border);
+	border-top: 2px solid var(--cyberdeck-cyan);
+	font-family: var(--font-mono);
+	font-size: 0.72rem;
+	padding: 0.75rem 1rem;
+	color: oklch(0.72 0.08 197);
+	line-height: 1.9;
+	overflow-y: auto;
+}
+html.cyberdeck .terminal .log-ok {
+	color: var(--cyberdeck-green);
+}
+html.cyberdeck .terminal .log-warn {
+	color: var(--cyberdeck-amber);
+}
+html.cyberdeck .terminal .log-error {
+	color: var(--cyberdeck-red);
+}
+html.cyberdeck .terminal .log-prompt::before {
+	content: "> ";
+	color: var(--cyberdeck-cyan);
+}
+html.cyberdeck .terminal-header {
+	font-size: 0.6rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--cyberdeck-cyan);
+	opacity: 0.6;
+	border-bottom: 1px solid var(--border);
+	padding-bottom: 0.4rem;
+	margin-bottom: 0.4rem;
+	display: flex;
+	justify-content: space-between;
+}
+html.cyberdeck .terminal-cursor {
+	display: inline-block;
+	width: 7px;
+	height: 0.9em;
+	background: var(--cyberdeck-cyan);
+	vertical-align: text-bottom;
+	animation: cyberdeck-pulse-dot 0.9s step-end infinite;
+}

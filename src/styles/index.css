@@ -1,8 +1,10 @@
+@import "./cyberdeck-theme.css";
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&: is(.dark *));
 
 @theme inline {
 	--radius-sm: calc(var(--radius) - 4px);
