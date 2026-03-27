@@ -54,7 +54,7 @@ export function BookHeader() {
 						<Button variant="outline" size="icon-sm" className="">
 							<CogIcon className="w-4 h-4" />
 						</Button>
-						<Button size="sm" className="gap-2">
+						<Button variant="outline" size="sm" className="gap-2">
 							<BookOpen className="w-4 h-4" /> Continue Writing
 						</Button>
 					</div>

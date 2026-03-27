@@ -151,7 +151,7 @@ function RouteComponent() {
 							Full View
 						</Button>
 					</CardHeader>
-					<CardContent className="space-y-6 relative before:absolute before:left-[1.65rem] before:top-8 before:bottom-8 before:w-[1px] before:bg-border">
+					<CardContent className="space-y-6 relative before:absolute before:left-[1.65rem] before:top-8 before:bottom-8 before:w-px before:bg-border">
 						<div className="flex gap-4 relative">
 							<div className="w-5 h-5 rounded-full border-2 border-primary bg-background z-10 shrink-0 mt-1" />
 							<div>

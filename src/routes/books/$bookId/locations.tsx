@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { Building2, Orbit, Rocket } from "lucide-react"
 import type React from "react"
+import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { SectionHeader } from "../-components/section-header"
 
@@ -33,6 +34,8 @@ const locations: Location[] = [
 ]
 
 function LocationPage() {
+	const [images] = useState(() => locations.map(() => `https://picsum.photos/600/300?random=${Math.random()}`))
+
 	return (
 		<div className="space-y-6">
 			<SectionHeader
@@ -43,13 +46,20 @@ function LocationPage() {
 				onActionClick={() => {}}
 			/>
 
-			<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-				{locations.map((loc) => (
-					<Card key={loc.name} className="bg-card border-border/50 shadow-sm">
-						<CardContent className="p-5 space-y-3">
-							<div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center">
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				{locations.map((loc, index) => (
+					<Card key={loc.name} className="relative overflow-hidden bg-card border-border/50 shadow-sm pt-0">
+						<div className="relative h-32 w-full overflow-hidden">
+							<img src={images[index]} alt={loc.name} className="w-full h-full object-cover" />
+
+							<div className="absolute inset-0 bg-linear-to-b from-transparent to-card" />
+						</div>
+
+						<CardContent className="p-5 space-y-3 -mt-16 relative z-10">
+							<div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center shadow border border-muted-foreground/20">
 								<loc.icon className="w-5 h-5 text-muted-foreground" />
 							</div>
+
 							<div>
 								<h3 className="text-sm font-semibold">{loc.name}</h3>
 								<p className="text-[11px] text-muted-foreground leading-relaxed mt-1">{loc.description}</p>
