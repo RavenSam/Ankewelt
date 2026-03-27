@@ -76,14 +76,6 @@ export const themeConfig = [
 			accent: "bg-[#df6035]",
 		},
 	},
-	{
-		value: "cyberdeck",
-		label: "Cyberdeck ",
-		colors: {
-			bg: "bg-[#00DCFF]",
-			accent: "bg-[#FF00FF]",
-		},
-	},
 ]
 
 // ============================================
