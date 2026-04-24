@@ -6,66 +6,99 @@ export type BookWithChapters = Book & {
 }
 
 export function transformBookToDnd(bookData: BookWithChapters) {
-	const chaptersById = new Map(bookData.chapters.map((c) => [c.id, c]))
+	// ✅ Always fallback to empty arrays
+	const chapters = bookData.chapters ?? []
+	const chapterGroups = bookData.chapterGroups ?? []
 
-	const groupsById = new Map(bookData.chapterGroups.map((g) => [g.id, g]))
+	const chaptersById = new Map(chapters.map((c) => [c.id, c]))
+	const groupsById = new Map(chapterGroups.map((g) => [g.id, g]))
 
-	// 1️⃣ Sort Groups According To Book Order
-	const groups = []
+	// Track used chapters to avoid duplicates
+	const usedChapterIds = new Set<string>()
 
-	const orderedGroupIds = bookData.chapters_groupes_order ?? []
+	// -----------------------------
+	// 1️⃣ GROUPS
+	// -----------------------------
+	const orderedGroupIds = safeArray(bookData.chapters_groupes_order)
 
+	const groups: ReturnType<typeof buildGroup>[] = []
+
+	// Ordered groups
 	for (const groupId of orderedGroupIds) {
 		const group = groupsById.get(groupId)
 		if (!group) continue
 
-		groups.push(buildGroup(group, chaptersById))
+		groups.push(buildGroup(group, chaptersById, usedChapterIds))
 	}
 
-	// Append any groups missing from order array
-	for (const group of bookData.chapterGroups) {
+	// Missing groups (not in order array)
+	for (const group of chapterGroups) {
 		if (!orderedGroupIds.includes(group.id)) {
-			groups.push(buildGroup(group, chaptersById))
+			groups.push(buildGroup(group, chaptersById, usedChapterIds))
 		}
 	}
 
-	// 2️⃣ Sort Ungrouped Chapters According To Book Order
-	const ungrouped = []
+	// -----------------------------
+	// 2️⃣ UNGROUPED
+	// -----------------------------
+	const orderedUngroupedIds = safeArray(bookData.ungrouped_chapters_order)
 
-	const orderedUngroupedIds = bookData.ungrouped_chapters_order ?? []
+	const ungrouped: Chapter[] = []
 
+	// Ordered ungrouped
 	for (const chId of orderedUngroupedIds) {
 		const chapter = chaptersById.get(chId)
-		if (chapter) ungrouped.push(chapter)
+		if (!chapter) continue
+		if (usedChapterIds.has(chId)) continue
+
+		ungrouped.push(chapter)
+		usedChapterIds.add(chId)
 	}
 
-	// Append missing ungrouped chapters
-	for (const chapter of bookData.chapters) {
-		if (chapter.group_id === null && !orderedUngroupedIds.includes(chapter.id)) {
+	// Remaining ungrouped
+	for (const chapter of chapters) {
+		if (usedChapterIds.has(chapter.id)) continue
+
+		if (!chapter.group_id || !groupsById.has(chapter.group_id)) {
 			ungrouped.push(chapter)
+			usedChapterIds.add(chapter.id)
 		}
 	}
 
+	// -----------------------------
+	// ✅ Final guarantee
+	// -----------------------------
 	return {
 		groups,
 		ungrouped,
 	}
 }
 
-function buildGroup(group: Group, chaptersById: Map<string, Chapter>) {
-	const chapters = []
+// ----------------------------------
+// 🧩 GROUP BUILDER (robust)
+// ----------------------------------
+function buildGroup(group: Group, chaptersById: Map<string, Chapter>, usedChapterIds: Set<string>) {
+	const orderedChapterIds = safeArray(group.chapters_order)
 
-	const orderedChapterIds = group.chapters_order ?? []
+	const chapters: Chapter[] = []
 
+	// Ordered chapters
 	for (const chId of orderedChapterIds) {
 		const chapter = chaptersById.get(chId)
-		if (chapter) chapters.push(chapter)
+		if (!chapter) continue
+		if (usedChapterIds.has(chId)) continue
+
+		chapters.push(chapter)
+		usedChapterIds.add(chId)
 	}
 
-	// Append missing chapters that belong to this group
+	// Missing chapters belonging to this group
 	for (const chapter of chaptersById.values()) {
-		if (chapter.group_id === group.id && !orderedChapterIds.includes(chapter.id)) {
+		if (usedChapterIds.has(chapter.id)) continue
+
+		if (chapter.group_id === group.id) {
 			chapters.push(chapter)
+			usedChapterIds.add(chapter.id)
 		}
 	}
 
@@ -73,7 +106,15 @@ function buildGroup(group: Group, chaptersById: Map<string, Chapter>) {
 		...group,
 		id: group.id,
 		name: group.name,
-		collapsed: group.collapsed,
+		collapsed: Boolean(group.collapsed),
 		chapters,
 	}
+}
+
+// ----------------------------------
+// 🛡️ Small utility
+// ----------------------------------
+function safeArray<T>(value: T[] | null | undefined): T[] {
+	if (!Array.isArray(value)) return []
+	return value.filter(Boolean)
 }

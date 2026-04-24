@@ -1,4 +1,4 @@
-import { useNavigate } from "@tanstack/react-router"
+import { useNavigate, useRouter } from "@tanstack/react-router"
 import { nanoid } from "nanoid"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -19,6 +19,7 @@ export function CreateBookDialog({ children }: { children: React.ReactNode }) {
 
 	const [open, setOpen] = useState(false)
 	const [loading, setLoading] = useState(false)
+	const router = useRouter()
 
 	const [form, setForm] = useState({
 		title: "",
@@ -58,6 +59,8 @@ export function CreateBookDialog({ children }: { children: React.ReactNode }) {
 				genre: "",
 				color: COLORS[0],
 			})
+
+			router.invalidate()
 
 			setOpen(false)
 

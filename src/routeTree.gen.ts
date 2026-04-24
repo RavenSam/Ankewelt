@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BooksIndexRouteImport } from './routes/books/index'
+import { Route as ChaptersChapterIdRouteImport } from './routes/chapters/$chapterId'
 import { Route as BooksBookIdRouteRouteImport } from './routes/books/$bookId/route'
 import { Route as BooksBookIdIndexRouteImport } from './routes/books/$bookId/index'
 import { Route as BooksBookIdPlotRouteImport } from './routes/books/$bookId/plot'
@@ -32,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
 const BooksIndexRoute = BooksIndexRouteImport.update({
   id: '/books/',
   path: '/books/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChaptersChapterIdRoute = ChaptersChapterIdRouteImport.update({
+  id: '/chapters/$chapterId',
+  path: '/chapters/$chapterId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BooksBookIdRouteRoute = BooksBookIdRouteRouteImport.update({
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/books/$bookId': typeof BooksBookIdRouteRouteWithChildren
+  '/chapters/$chapterId': typeof ChaptersChapterIdRoute
   '/books/': typeof BooksIndexRoute
   '/books/$bookId/chapters': typeof BooksBookIdChaptersRoute
   '/books/$bookId/characters': typeof BooksBookIdCharactersRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/chapters/$chapterId': typeof ChaptersChapterIdRoute
   '/books': typeof BooksIndexRoute
   '/books/$bookId/chapters': typeof BooksBookIdChaptersRoute
   '/books/$bookId/characters': typeof BooksBookIdCharactersRoute
@@ -91,6 +99,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/books/$bookId': typeof BooksBookIdRouteRouteWithChildren
+  '/chapters/$chapterId': typeof ChaptersChapterIdRoute
   '/books/': typeof BooksIndexRoute
   '/books/$bookId/chapters': typeof BooksBookIdChaptersRoute
   '/books/$bookId/characters': typeof BooksBookIdCharactersRoute
@@ -104,6 +113,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/books/$bookId'
+    | '/chapters/$chapterId'
     | '/books/'
     | '/books/$bookId/chapters'
     | '/books/$bookId/characters'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/chapters/$chapterId'
     | '/books'
     | '/books/$bookId/chapters'
     | '/books/$bookId/characters'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/books/$bookId'
+    | '/chapters/$chapterId'
     | '/books/'
     | '/books/$bookId/chapters'
     | '/books/$bookId/characters'
@@ -137,6 +149,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   BooksBookIdRouteRoute: typeof BooksBookIdRouteRouteWithChildren
+  ChaptersChapterIdRoute: typeof ChaptersChapterIdRoute
   BooksIndexRoute: typeof BooksIndexRoute
 }
 
@@ -161,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/books'
       fullPath: '/books/'
       preLoaderRoute: typeof BooksIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chapters/$chapterId': {
+      id: '/chapters/$chapterId'
+      path: '/chapters/$chapterId'
+      fullPath: '/chapters/$chapterId'
+      preLoaderRoute: typeof ChaptersChapterIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/books/$bookId': {
@@ -231,6 +251,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   BooksBookIdRouteRoute: BooksBookIdRouteRouteWithChildren,
+  ChaptersChapterIdRoute: ChaptersChapterIdRoute,
   BooksIndexRoute: BooksIndexRoute,
 }
 export const routeTree = rootRouteImport

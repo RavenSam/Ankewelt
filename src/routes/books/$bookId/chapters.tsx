@@ -8,9 +8,11 @@ import {
 	pointerWithin,
 } from "@dnd-kit/core"
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router"
 import { eq } from "drizzle-orm"
 import { useCallback, useState } from "react"
+import { createChapter } from "@/actions/chapters-actions"
+import { Button } from "@/components/ui/button"
 import db from "@/db/database"
 import { book } from "@/db/schema"
 import { transformBookToDnd } from "@/helpers/get-chapters-and-groups"
@@ -27,7 +29,7 @@ export const Route = createFileRoute("/books/$bookId/chapters")({
 			with: { chapters: true, chapterGroups: true },
 		})
 		if (!bookData) throw new Error("Book not found")
-		return { bookData: transformBookToDnd(bookData) }
+		return { bookData: transformBookToDnd(bookData), bookId: bookData.id }
 	},
 	component: ChaptersPage,
 })
@@ -42,14 +44,18 @@ const dropAnimation = {
 	}),
 }
 
-export function ChaptersPage() {
-	const { bookData } = Route.useLoaderData()
-	const [search, setSearch] = useState("")
+function getNextChapterNumber(chapters: { chapterNumber: number }[]) {
+	if (chapters.length === 0) return 1
+	return Math.max(...chapters.map((c) => c.chapterNumber)) + 1
+}
 
-	const { state, activeItem, sensors, onDragStart, onDragOver, onDragEnd, toggleGroupCollapsed } = useDragAndDrop(
-		bookData,
-		bookData.groups[0].book_id,
-	)
+export function ChaptersPage() {
+	const { bookData, bookId } = Route.useLoaderData()
+	const [search, setSearch] = useState("")
+	const router = useRouter()
+
+	const { state, activeItem, sensors, onDragStart, onDragOver, onDragEnd, toggleGroupCollapsed, isEmpty } =
+		useDragAndDrop(bookData, bookId)
 
 	const groupIds = state.groups.map((g) => g.id)
 
@@ -62,7 +68,39 @@ export function ChaptersPage() {
 		return closestCenter(args)
 	}, [])
 
-	console.log({ bookData })
+	const navigate = useNavigate()
+
+	const handleCreateChapter = async () => {
+		const nextNumber = getNextChapterNumber([...state.ungrouped, ...state.groups.flatMap((g) => g.chapters)])
+
+		const chapterId = await createChapter({
+			bookId,
+			title: "Untitled",
+			content: "",
+			chapterNumber: nextNumber,
+		})
+
+		router.invalidate()
+
+		// redirect to chapter editor page
+		navigate({
+			to: "/chapters/$chapterId",
+			params: { chapterId },
+		})
+	}
+
+	if (isEmpty) {
+		return (
+			<div className="flex flex-col items-center justify-center py-24 text-center">
+				<div className="text-lg font-medium mb-2">No chapters yet</div>
+				<div className="text-sm text-muted-foreground mb-6">Start writing by creating your first chapter.</div>
+
+				<Button size="lg" onClick={handleCreateChapter} className="font-bold text-base">
+					Create your first chapter
+				</Button>
+			</div>
+		)
+	}
 
 	return (
 		<div className="min-h-screen bg-background">
@@ -73,7 +111,7 @@ export function ChaptersPage() {
 					onSearchChange={setSearch}
 					searchPlaceholder="Search chapters..."
 					actionLabel="New Chapter"
-					onActionClick={() => {}}
+					onActionClick={handleCreateChapter}
 				/>
 
 				<DndContext

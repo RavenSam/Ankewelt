@@ -16,7 +16,7 @@ const chapter = sqliteTable("chapter", {
 	}),
 
 	title: text("title").notNull(),
-	chapterNumber: integer("chapter_number").notNull(),
+	chapterNumber: integer("chapter_number").notNull(), // REMOVE THI SHIT
 	word_count: integer("word_count").notNull(),
 
 	status: text("status").default("draft"),

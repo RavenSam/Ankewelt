@@ -10,7 +10,7 @@ import {
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable"
 import { useState } from "react"
 import type { Chapter, Group } from "types"
-import { saveChapterOrder } from "@/components/actions/save-chapter-order"
+import { saveChapterOrder } from "@/actions/save-chapter-order"
 
 export type DndState = {
 	groups: (Group & { chapters: Chapter[] })[]
@@ -81,6 +81,7 @@ function insertChapter(state: DndState, chapter: Chapter, toContainer: string, o
 export function useDragAndDrop(initialState: DndState, bookId: string) {
 	const [state, setState] = useState<DndState>(initialState)
 	const [activeItem, setActiveItem] = useState<ActiveItem>(null)
+	const isEmpty = state.groups.length === 0 && state.ungrouped.length === 0
 
 	const sensors = useSensors(
 		useSensor(PointerSensor, {
@@ -239,5 +240,6 @@ export function useDragAndDrop(initialState: DndState, bookId: string) {
 		onDragEnd,
 		toggleGroupCollapsed,
 		ungroupChapter,
+		isEmpty,
 	}
 }
