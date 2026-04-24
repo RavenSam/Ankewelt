@@ -1,6 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
+import { format } from "date-fns"
 import { Pencil, PencilLine, PenIcon, Plus, PlusCircle } from "lucide-react"
 import React, { useRef } from "react"
+import { CreateBookDialog } from "@/components/create-book"
 import { ActivityIcon } from "@/components/ui/activity"
 import { AnimatedCircularProgressBar } from "@/components/ui/animated-circular-progress-bar"
 import { Badge } from "@/components/ui/badge"
@@ -31,15 +33,17 @@ function Dashboard() {
 
 	return (
 		<div className="min-h-screen p-8 pt-14">
-			<header className="flex justify-between items-start mb-14">
+			<header className="flex justify-between items-end mb-14">
 				<div>
-					<p className="text-muted-foreground text-sm mb-1">Tuesday, October 24</p>
+					<p className="text-muted-foreground text-sm mb-1">{format(new Date(), "EEEE, MMMM d")}</p>
 					<h1 className="text-3xl font-semibold">Good morning, {currentUser.name}</h1>
 				</div>
 				<div className="flex gap-3">
-					<Button className="gap-2 font-semibold" size={"lg"}>
-						<Plus size={18} /> New Book
-					</Button>
+					<CreateBookDialog>
+						<Button className="gap-2 font-semibold" size={"lg"}>
+							<Plus size={18} /> New Book
+						</Button>
+					</CreateBookDialog>
 				</div>
 			</header>
 
@@ -233,7 +237,7 @@ const QuickNote = () => (
 	<Card className="border-none shadow-sm relative group h-full">
 		<CardHeader className="">
 			<div className="flex justify-between items-center">
-				<CardTitle className="text-sm font-semibold text-slate-700">Quick Note</CardTitle>
+				<CardTitle className="text-sm font-semibold">Quick Note</CardTitle>
 				<PlusCircle size={16} className="text-slate-300 hover:text-muted-foreground cursor-pointer" />
 			</div>
 		</CardHeader>

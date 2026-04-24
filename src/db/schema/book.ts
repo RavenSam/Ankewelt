@@ -9,7 +9,7 @@ import user from "./user"
 
 const book = sqliteTable("book", {
 	id: text("id").primaryKey().unique(),
-	user_id: text("user_id")
+	user_id: integer("user_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
 
