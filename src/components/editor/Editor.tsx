@@ -199,6 +199,7 @@ export function Editor() {
 		}
 	}, [editor, recomputeMarkers])
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: need the change
 	useLayoutEffect(() => {
 		recomputeMarkers()
 	}, [theme.fontFamily, theme.fontSize, theme.colorPalette, recomputeMarkers])
@@ -318,10 +319,7 @@ export function Editor() {
 
 			<main className="flex-1 w-full max-w-3xl mx-auto p-8 sm:p-12 md:p-24 pb-32">
 				<div ref={containerRef} className="relative">
-					<EditorContent
-						editor={editor}
-						className="prose prose-neutral dark:prose-invert max-w-none focus:outline-none"
-					/>
+					<EditorContent editor={editor} className="prose max-w-none focus:outline-none" />
 					<div className="hidden md:block absolute top-0 -right-12 w-10 h-full pointer-events-none" aria-hidden="false">
 						{commentMarkers.map((m) => (
 							<button

@@ -76,19 +76,19 @@ export const BubbleMenu = ({ editor, onAddComment }: EditorBubbleMenuProps) => {
 	}
 
 	return (
-		<TiptapBubbleMenu editor={editor} tippyOptions={{ duration: 100, zIndex: 50 }}>
+		<TiptapBubbleMenu editor={editor}>
 			<motion.div
 				initial={{ opacity: 0, y: 5 }}
 				animate={{ opacity: 1, y: 0 }}
 				exit={{ opacity: 0, y: 5 }}
-				className="flex items-center bg-popover text-popover-foreground border shadow-md rounded-md p-1 space-x-1"
+				className="flex items-center bg-popover/50 backdrop-blur-md text-popover-foreground border shadow-md rounded-md p-1 space-x-1"
 			>
 				<button
 					type="button"
 					onClick={() => editor.chain().focus().toggleBold().run()}
 					className={cn(
-						"p-1.5 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors",
-						editor.isActive("bold") && "bg-accent text-accent-foreground",
+						"p-1.5 rounded-sm hover:bg-primary hover:text-primary-foreground transition-colors",
+						editor.isActive("bold") && "bg-primary text-primary-foreground",
 					)}
 					title="Bold"
 				>
@@ -98,8 +98,8 @@ export const BubbleMenu = ({ editor, onAddComment }: EditorBubbleMenuProps) => {
 					type="button"
 					onClick={() => editor.chain().focus().toggleItalic().run()}
 					className={cn(
-						"p-1.5 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors",
-						editor.isActive("italic") && "bg-accent text-accent-foreground",
+						"p-1.5 rounded-sm hover:bg-primary hover:text-primary-foreground transition-colors",
+						editor.isActive("italic") && "bg-primary text-primary-foreground",
 					)}
 					title="Italic"
 				>
@@ -109,8 +109,8 @@ export const BubbleMenu = ({ editor, onAddComment }: EditorBubbleMenuProps) => {
 					type="button"
 					onClick={() => editor.chain().focus().toggleStrike().run()}
 					className={cn(
-						"p-1.5 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors",
-						editor.isActive("strike") && "bg-accent text-accent-foreground",
+						"p-1.5 rounded-sm hover:bg-primary hover:text-primary-foreground transition-colors",
+						editor.isActive("strike") && "bg-primary text-primary-foreground",
 					)}
 					title="Strikethrough"
 				>
@@ -124,8 +124,8 @@ export const BubbleMenu = ({ editor, onAddComment }: EditorBubbleMenuProps) => {
 						<button
 							type="button"
 							className={cn(
-								"p-1.5 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors",
-								editor.isActive("link") && "bg-accent text-accent-foreground",
+								"p-1.5 rounded-sm hover:bg-primary hover:text-primary-foreground transition-colors",
+								editor.isActive("link") && "bg-primary text-primary-foreground",
 							)}
 							title="Link"
 						>
@@ -196,8 +196,8 @@ export const BubbleMenu = ({ editor, onAddComment }: EditorBubbleMenuProps) => {
 						<button
 							type="button"
 							className={cn(
-								"p-1.5 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors",
-								editor.isActive("customHighlight") && "bg-accent text-accent-foreground",
+								"p-1.5 rounded-sm hover:bg-primary hover:text-primary-foreground transition-colors",
+								editor.isActive("customHighlight") && "bg-primary text-primary-foreground",
 							)}
 							title="Highlight"
 						>
@@ -238,7 +238,7 @@ export const BubbleMenu = ({ editor, onAddComment }: EditorBubbleMenuProps) => {
 									editor.chain().focus().unsetHighlight().run()
 									setHighlightOpen(false)
 								}}
-								className="w-6 h-6 rounded-full border flex items-center justify-center hover:bg-accent transition-colors"
+								className="w-6 h-6 rounded-full border flex items-center justify-center hover:bg-primary transition-colors"
 								title="Remove highlight"
 							>
 								<X className="w-3 h-3 text-destructive" />
@@ -256,7 +256,7 @@ export const BubbleMenu = ({ editor, onAddComment }: EditorBubbleMenuProps) => {
 							if (text.trim() === "") return
 							onAddComment(text)
 						}}
-						className={cn("p-1.5 rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors")}
+						className={cn("p-1.5 rounded-sm hover:bg-primary hover:text-primary-foreground transition-colors")}
 						title="Add comment"
 					>
 						<MessageSquare className="w-4 h-4" />

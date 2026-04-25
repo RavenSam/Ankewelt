@@ -35,7 +35,7 @@ export function HighlightsPanel({
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent className="w-[400px] sm:w-[540px]">
+			<SheetContent className="w-100 sm:w-135">
 				<SheetHeader>
 					<SheetTitle className="flex items-center gap-2">
 						<Highlighter className="w-5 h-5" />

@@ -21,7 +21,7 @@ export function CommentsPanel({ open, onOpenChange, threads, activeId, onResolve
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent className="w-[400px] sm:w-[540px]">
+			<SheetContent className="w-100 sm:w-135">
 				<SheetHeader>
 					<SheetTitle className="flex items-center gap-2">
 						<MessageSquare className="w-5 h-5" />
@@ -49,7 +49,7 @@ export function CommentsPanel({ open, onOpenChange, threads, activeId, onResolve
 										data-active={isActive ? "true" : undefined}
 										className={
 											"p-4 rounded-lg border bg-card transition-colors cursor-pointer group " +
-											(isActive ? "border-primary ring-1 ring-primary/30 bg-primary/[0.03]" : "hover:border-primary/50")
+											(isActive ? "border-primary ring-1 ring-primary/30 bg-primary/3" : "hover:border-primary/50")
 										}
 										onClick={() => onSelect(thread.id)}
 									>
