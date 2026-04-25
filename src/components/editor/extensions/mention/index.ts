@@ -14,8 +14,8 @@ export const Mention = Node.create({
 	addOptions() {
 		return {
 			HTMLAttributes: {},
-			renderLabel({ options, node }: { options: any; node: any }) {
-				return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`
+			renderLabel({ node }: { options: any; node: any }) {
+				return node.attrs.label ?? node.attrs.id ?? ""
 			},
 			suggestion: {
 				char: "@",
@@ -113,6 +113,14 @@ export const Mention = Node.create({
 				renderHTML: (attributes) => {
 					if (!attributes.label) return {}
 					return { "data-label": attributes.label }
+				},
+			},
+			kind: {
+				default: "character",
+				parseHTML: (element) => element.getAttribute("data-kind"),
+				renderHTML: (attributes) => {
+					if (!attributes.kind) return {}
+					return { "data-kind": attributes.kind }
 				},
 			},
 		}

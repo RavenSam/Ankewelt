@@ -7,6 +7,7 @@ import { Highlighter, MessageSquare, MessageSquareText, Settings } from "lucide-
 import { nanoid } from "nanoid"
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
+import { MOCK_LOCATIONS } from "@/lib/mockLocations"
 import { MOCK_USERS } from "@/lib/mockUsers"
 import type { CommentThread, Highlight } from "@/lib/types"
 import { useTheme } from "@/lib/useTheme"
@@ -25,7 +26,7 @@ const initialContent = `
   <h1>Lumina</h1>
   <p>A quiet place to write. Select text to see the bubble menu, or type <code>/</code> for block commands.</p>
   <p>You can <mark data-color="yellow" data-id="h-seed-1" class="highlight-yellow">highlight important thoughts</mark> or <span data-id="c1" class="comment-mark">leave comments</span> for yourself or others.</p>
-  <p>And of course, you can mention people by typing <code>@</code> — like <span data-type="mention" data-id="1" data-label="elena">@elena</span>.</p>
+  <p>And of course, you can mention people by typing <code>@</code> — like <span data-type="mention" data-id="1" data-label="elena">elena</span>.</p>
 `
 
 const initialComments: CommentThread[] = [
@@ -126,7 +127,17 @@ export function Editor() {
 			Mention.configure({
 				suggestion: {
 					items: ({ query }: { query: string }) => {
-						return MOCK_USERS.filter((item) => item.username.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
+						const q = query.toLowerCase()
+						const users = MOCK_USERS
+							.filter(
+								(u) =>
+									u.username.toLowerCase().includes(q) || u.name.toLowerCase().includes(q),
+							)
+							.map((u) => ({ ...u, kind: "character" as const }))
+						const locations = MOCK_LOCATIONS
+							.filter((l) => l.name.toLowerCase().includes(q))
+							.map((l) => ({ ...l, kind: "location" as const }))
+						return [...users.slice(0, 3), ...locations.slice(0, 3)]
 					},
 				},
 			}),

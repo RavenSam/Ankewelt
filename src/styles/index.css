@@ -457,7 +457,11 @@
 	}
 
 	.mention-chip {
-		@apply inline-flex items-center rounded bg-accent px-1.5 py-0.5 text-sm font-medium text-accent-foreground cursor-pointer transition-colors hover:bg-accent/80;
+		@apply inline-flex items-center rounded bg-sky-950 px-1.5 py-0.5 text-sm font-medium text-accent-foreground cursor-pointer transition-colors hover:bg-sky-950/80;
+	}
+
+	.mention-chip-location {
+		@apply inline-flex items-center rounded bg-emerald-950 px-1.5 py-0.5 text-sm font-medium text-accent-foreground cursor-pointer transition-colors hover:bg-emerald-950/80;
 	}
 
 	.comment-mark {
