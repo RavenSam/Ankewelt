@@ -11,7 +11,7 @@ import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router"
 import { eq } from "drizzle-orm"
 import { useCallback, useState } from "react"
-import { createChapter } from "@/actions/chapters-actions"
+import { createChapter, deleteGroup, renameGroup } from "@/actions/chapters-actions"
 import { Button } from "@/components/ui/button"
 import db from "@/db/database"
 import { book } from "@/db/schema"
@@ -20,6 +20,8 @@ import { useDragAndDrop } from "@/hooks/use-drag-and-drop"
 import { GroupContainer, GroupContainerOverlay } from "../-components/chapter-group-container"
 import { ChapterRow } from "../-components/chapter-item"
 import { UngroupedSection } from "../-components/chapter-ungrouped-section"
+import { DeleteChapterDialog } from "../-components/delete-chapter-dialog"
+import { MoveChapterToGroupDialog } from "../-components/move-chapter-to-group-dialog"
 import { SectionHeader } from "../-components/section-header"
 
 export const Route = createFileRoute("/books/$bookId/chapters")({
@@ -52,10 +54,22 @@ function getNextChapterNumber(chapters: { chapterNumber: number }[]) {
 export function ChaptersPage() {
 	const { bookData, bookId } = Route.useLoaderData()
 	const [search, setSearch] = useState("")
+	const [deleteChapterId, setDeleteChapterId] = useState<string | null>(null)
+	const [moveGroupChapterId, setMoveGroupChapterId] = useState<string | null>(null)
+	const [moveGroupCurrentGroupId, setMoveGroupCurrentGroupId] = useState<string | null>(null)
 	const router = useRouter()
 
-	const { state, activeItem, sensors, onDragStart, onDragOver, onDragEnd, toggleGroupCollapsed, isEmpty } =
-		useDragAndDrop(bookData, bookId)
+	const {
+		state,
+		activeItem,
+		sensors,
+		onDragStart,
+		onDragOver,
+		onDragEnd,
+		toggleGroupCollapsed,
+		ungroupChapter,
+		isEmpty,
+	} = useDragAndDrop(bookData, bookId)
 
 	const groupIds = state.groups.map((g) => g.id)
 
@@ -82,11 +96,57 @@ export function ChaptersPage() {
 
 		router.invalidate()
 
-		// redirect to chapter editor page
 		navigate({
 			to: "/chapters/$chapterId",
 			params: { chapterId },
 		})
+	}
+
+	const handleOpenChapter = (chapterId: string) => {
+		navigate({ to: "/chapters/$chapterId", params: { chapterId } })
+	}
+
+	const handleDeleteChapter = (chapterId: string) => {
+		setDeleteChapterId(chapterId)
+	}
+
+	const handleMoveGroupChapter = (chapterId: string) => {
+		// Find the chapter's current group_id
+		const chapter =
+			state.ungrouped.find((c) => c.id === chapterId) ??
+			state.groups.flatMap((g) => g.chapters).find((c) => c.id === chapterId)
+		setMoveGroupCurrentGroupId(chapter?.group_id ?? null)
+		setMoveGroupChapterId(chapterId)
+	}
+
+	const handleRenameGroup = async (groupId: string) => {
+		const group = state.groups.find((g) => g.id === groupId)
+		if (!group) return
+
+		const newName = window.prompt("Rename group", group.name)
+		if (!newName || newName === group.name) return
+
+		try {
+			await renameGroup(groupId, newName)
+			router.invalidate()
+		} catch (e) {
+			console.error("Failed to rename group:", e)
+		}
+	}
+
+	const handleDeleteGroup = async (groupId: string) => {
+		const group = state.groups.find((g) => g.id === groupId)
+		if (!group) return
+
+		const confirmed = window.confirm(`Delete group "${group.name}" and move its chapters to ungrouped?`)
+		if (!confirmed) return
+
+		try {
+			await deleteGroup(groupId)
+			router.invalidate()
+		} catch (e) {
+			console.error("Failed to delete group:", e)
+		}
 	}
 
 	if (isEmpty) {
@@ -125,10 +185,30 @@ export function ChaptersPage() {
 					<SortableContext items={groupIds} strategy={verticalListSortingStrategy}>
 						<div className="space-y-3">
 							{state.groups.map((group) => (
-								<GroupContainer key={group.id} group={group} onToggleCollapse={toggleGroupCollapsed} />
+								<GroupContainer
+									key={group.id}
+									group={group}
+									onToggleCollapse={toggleGroupCollapsed}
+									onOpenChapter={handleOpenChapter}
+									onUngroupChapter={ungroupChapter}
+									onDeleteChapter={handleDeleteChapter}
+									onMoveGroupChapter={handleMoveGroupChapter}
+									onRenameGroup={handleRenameGroup}
+									onDeleteGroup={handleDeleteGroup}
+								/>
 							))}
 
-							{showUngrouped && <UngroupedSection chapters={state.ungrouped} isEmpty={state.ungrouped.length === 0} />}
+							{!!(state.groups.length > 0) && <hr className="mt-10 mb-5" />}
+
+							{showUngrouped && (
+								<UngroupedSection
+									chapters={state.ungrouped}
+									isEmpty={state.ungrouped.length === 0}
+									onOpenChapter={handleOpenChapter}
+									onDeleteChapter={handleDeleteChapter}
+									onMoveGroupChapter={handleMoveGroupChapter}
+								/>
+							)}
 						</div>
 					</SortableContext>
 
@@ -138,6 +218,32 @@ export function ChaptersPage() {
 					</DragOverlay>
 				</DndContext>
 			</div>
+
+			<DeleteChapterDialog
+				open={deleteChapterId !== null}
+				chapterId={deleteChapterId}
+				onClose={() => setDeleteChapterId(null)}
+				onDeleted={() => {
+					setDeleteChapterId(null)
+					router.invalidate()
+				}}
+			/>
+
+			<MoveChapterToGroupDialog
+				open={moveGroupChapterId !== null}
+				bookId={bookId}
+				chapterId={moveGroupChapterId}
+				currentGroupId={moveGroupCurrentGroupId}
+				onClose={() => {
+					setMoveGroupChapterId(null)
+					setMoveGroupCurrentGroupId(null)
+				}}
+				onMoved={() => {
+					setMoveGroupChapterId(null)
+					setMoveGroupCurrentGroupId(null)
+					router.invalidate()
+				}}
+			/>
 		</div>
 	)
 }

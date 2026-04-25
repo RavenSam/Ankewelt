@@ -8,9 +8,18 @@ import { ChapterItem } from "./chapter-item"
 interface UngroupedSectionProps {
 	chapters: Chapter[]
 	isEmpty?: boolean
+	onOpenChapter?: (chapterId: string) => void
+	onDeleteChapter?: (chapterId: string) => void
+	onMoveGroupChapter?: (chapterId: string) => void
 }
 
-export function UngroupedSection({ chapters, isEmpty = false }: UngroupedSectionProps) {
+export function UngroupedSection({
+	chapters,
+	isEmpty = false,
+	onOpenChapter,
+	onDeleteChapter,
+	onMoveGroupChapter,
+}: UngroupedSectionProps) {
 	const chapterIds = chapters.map((c) => c.id)
 
 	const { setNodeRef, isOver } = useDroppable({ id: UNGROUPED_CONTAINER_ID })
@@ -54,7 +63,19 @@ export function UngroupedSection({ chapters, isEmpty = false }: UngroupedSection
 					<SortableContext items={chapterIds} strategy={verticalListSortingStrategy}>
 						<div>
 							{chapters.map((chapter) => (
-								<ChapterItem key={chapter.id} chapter={chapter} />
+								<ChapterItem
+									key={chapter.id}
+									chapter={chapter}
+									onOpen={onOpenChapter ? () => onOpenChapter(chapter.id) : undefined}
+									onDelete={
+										onDeleteChapter ? () => onDeleteChapter(chapter.id) : undefined
+									}
+									onMoveGroup={
+										onMoveGroupChapter
+											? () => onMoveGroupChapter(chapter.id)
+											: undefined
+									}
+								/>
 							))}
 						</div>
 					</SortableContext>

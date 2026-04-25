@@ -1,6 +1,6 @@
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { FolderMinus, GripVertical, MoreHorizontal } from "lucide-react"
+import { BookOpen, FolderMinus, FolderPlus, GripVertical, MoreHorizontal, Trash2 } from "lucide-react"
 import type { Chapter } from "types"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -31,10 +31,22 @@ interface ChapterRowProps {
 	dragHandleProps?: React.HTMLAttributes<HTMLButtonElement>
 	isDragging?: boolean
 	isOverlay?: boolean
+	onOpen?: () => void
 	onUngroup?: () => void
+	onDelete?: () => void
+	onMoveGroup?: () => void
 }
 
-export function ChapterRow({ chapter, dragHandleProps, isDragging, isOverlay, onUngroup }: ChapterRowProps) {
+export function ChapterRow({
+	chapter,
+	dragHandleProps,
+	isDragging,
+	isOverlay,
+	onOpen,
+	onUngroup,
+	onDelete,
+	onMoveGroup,
+}: ChapterRowProps) {
 	return (
 		<div
 			className={cn(
@@ -56,12 +68,25 @@ export function ChapterRow({ chapter, dragHandleProps, isDragging, isOverlay, on
 				<GripVertical className="h-4 w-4" />
 			</button>
 
-			<div className="flex-1 min-w-0 flex items-center gap-2">
-				<span className="text-xs text-muted-foreground shrink-0 tabular-nums w-6 text-right">
-					{chapter.chapterNumber}
-				</span>
-				<span className="text-sm font-medium text-foreground truncate">{chapter.title}</span>
-			</div>
+			{onOpen && !isOverlay ? (
+				<button
+					type="button"
+					onClick={onOpen}
+					className="flex-1 min-w-0 flex items-center gap-2 text-left cursor-pointer"
+				>
+					<span className="text-xs text-muted-foreground shrink-0 tabular-nums w-6 text-right">
+						{chapter.chapterNumber}
+					</span>
+					<span className="text-sm font-medium text-foreground truncate">{chapter.title}</span>
+				</button>
+			) : (
+				<div className="flex-1 min-w-0 flex items-center gap-2">
+					<span className="text-xs text-muted-foreground shrink-0 tabular-nums w-6 text-right">
+						{chapter.chapterNumber}
+					</span>
+					<span className="text-sm font-medium text-foreground truncate">{chapter.title}</span>
+				</div>
+			)}
 
 			<div className="w-32 shrink-0 hidden sm:block text-sm text-muted-foreground tabular-nums">
 				{chapter.word_count.toLocaleString()}
@@ -89,10 +114,35 @@ export function ChapterRow({ chapter, dragHandleProps, isDragging, isOverlay, on
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
+						{onOpen && (
+							<DropdownMenuItem onClick={onOpen}>
+								<BookOpen className="h-4 w-4 mr-2 text-muted-foreground" />
+								Open
+							</DropdownMenuItem>
+						)}
+						{onMoveGroup && (
+							<DropdownMenuItem onClick={onMoveGroup}>
+								{chapter.group_id ? (
+									<FolderPlus className="h-4 w-4 mr-2 text-muted-foreground" />
+								) : (
+									<FolderPlus className="h-4 w-4 mr-2 text-muted-foreground" />
+								)}
+								{chapter.group_id ? "Change Group" : "Add to Group"}
+							</DropdownMenuItem>
+						)}
 						{onUngroup && (
 							<DropdownMenuItem onClick={onUngroup}>
 								<FolderMinus className="h-4 w-4 mr-2 text-muted-foreground" />
 								Ungroup
+							</DropdownMenuItem>
+						)}
+						{onDelete && (
+							<DropdownMenuItem
+								onClick={onDelete}
+								className="text-destructive focus:text-destructive"
+							>
+								<Trash2 className="h-4 w-4 mr-2" />
+								Delete
 							</DropdownMenuItem>
 						)}
 					</DropdownMenuContent>
@@ -106,10 +156,13 @@ export function ChapterRow({ chapter, dragHandleProps, isDragging, isOverlay, on
 
 interface ChapterItemProps {
 	chapter: Chapter
+	onOpen?: () => void
 	onUngroup?: () => void
+	onDelete?: () => void
+	onMoveGroup?: () => void
 }
 
-export function ChapterItem({ chapter, onUngroup }: ChapterItemProps) {
+export function ChapterItem({ chapter, onOpen, onUngroup, onDelete, onMoveGroup }: ChapterItemProps) {
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id: chapter.id,
 		data: { type: "chapter" },
@@ -127,7 +180,10 @@ export function ChapterItem({ chapter, onUngroup }: ChapterItemProps) {
 				chapter={chapter}
 				dragHandleProps={{ ...attributes, ...listeners }}
 				isDragging={isDragging}
+				onOpen={onOpen}
 				onUngroup={onUngroup}
+				onDelete={onDelete}
+				onMoveGroup={onMoveGroup}
 			/>
 		</div>
 	)

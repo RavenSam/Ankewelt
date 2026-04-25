@@ -8,7 +8,7 @@ import {
 	useSensors,
 } from "@dnd-kit/core"
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import type { Chapter, Group } from "types"
 import { saveChapterOrder } from "@/actions/save-chapter-order"
 
@@ -82,6 +82,18 @@ export function useDragAndDrop(initialState: DndState, bookId: string) {
 	const [state, setState] = useState<DndState>(initialState)
 	const [activeItem, setActiveItem] = useState<ActiveItem>(null)
 	const isEmpty = state.groups.length === 0 && state.ungrouped.length === 0
+
+	// Build a stable snapshot key from the data shape.
+	// When the loader returns new data (e.g. after a delete), this string changes,
+	// causing the effect to sync the DnD state from the fresh initialState.
+	const snapshot = [
+		...initialState.groups.map((g) => `${g.id}:${g.chapters.map((c) => c.id).sort().join(",")}`).sort(),
+		`__ungrouped:${initialState.ungrouped.map((c) => c.id).sort().join(",")}`,
+	].join("|")
+
+	useEffect(() => {
+		setState(initialState)
+	}, [snapshot])
 
 	const sensors = useSensors(
 		useSensor(PointerSensor, {

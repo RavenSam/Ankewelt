@@ -1,9 +1,15 @@
 import { useDroppable } from "@dnd-kit/core"
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { ChevronDown, ChevronRight, GripVertical, MoreHorizontal } from "lucide-react"
+import { ChevronDown, ChevronRight, GripVertical, MoreHorizontal, Pencil, Trash2 } from "lucide-react"
 import type { Chapter, Group } from "types"
 import { Button } from "@/components/ui/button"
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { ChapterItem } from "./chapter-item"
 
@@ -11,9 +17,23 @@ interface GroupContainerProps {
 	group: Group & { chapters: Chapter[] }
 	onToggleCollapse?: (id: string) => void
 	onUngroupChapter?: (chapterId: string) => void
+	onOpenChapter?: (chapterId: string) => void
+	onDeleteChapter?: (chapterId: string) => void
+	onMoveGroupChapter?: (chapterId: string) => void
+	onRenameGroup?: (groupId: string) => void
+	onDeleteGroup?: (groupId: string) => void
 }
 
-export function GroupContainer({ group, onToggleCollapse, onUngroupChapter }: GroupContainerProps) {
+export function GroupContainer({
+	group,
+	onToggleCollapse,
+	onUngroupChapter,
+	onOpenChapter,
+	onDeleteChapter,
+	onMoveGroupChapter,
+	onRenameGroup,
+	onDeleteGroup,
+}: GroupContainerProps) {
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id: group.id,
 		data: { type: "group" },
@@ -73,9 +93,35 @@ export function GroupContainer({ group, onToggleCollapse, onUngroupChapter }: Gr
 					<span>{group.chapters.reduce((sum, c) => sum + c.word_count, 0)} words</span>
 				</div>
 
-				<Button variant="ghost" size="icon" className="h-7 w-7 ml-1 shrink-0">
-					<MoreHorizontal className="h-4 w-4" />
-				</Button>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button
+							variant="ghost"
+							size="icon"
+							className="h-7 w-7 ml-1 shrink-0"
+							onClick={(e) => e.stopPropagation()}
+						>
+							<MoreHorizontal className="h-4 w-4" />
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end">
+						{onRenameGroup && (
+							<DropdownMenuItem onClick={() => onRenameGroup(group.id)}>
+								<Pencil className="h-4 w-4 mr-2 text-muted-foreground" />
+								Rename
+							</DropdownMenuItem>
+						)}
+						{onDeleteGroup && (
+							<DropdownMenuItem
+								onClick={() => onDeleteGroup(group.id)}
+								className="text-destructive focus:text-destructive"
+							>
+								<Trash2 className="h-4 w-4 mr-2" />
+								Delete Group
+							</DropdownMenuItem>
+						)}
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</div>
 
 			{!group.collapsed && (
@@ -83,7 +129,10 @@ export function GroupContainer({ group, onToggleCollapse, onUngroupChapter }: Gr
 					groupId={group.id}
 					chapterIds={chapterIds}
 					chapters={group.chapters}
+					onOpenChapter={onOpenChapter}
 					onUngroupChapter={onUngroupChapter}
+					onDeleteChapter={onDeleteChapter}
+					onMoveGroupChapter={onMoveGroupChapter}
 				/>
 			)}
 		</div>
@@ -94,10 +143,21 @@ interface ChapterDropZoneProps {
 	groupId: string
 	chapterIds: string[]
 	chapters: Chapter[]
+	onOpenChapter?: (chapterId: string) => void
 	onUngroupChapter?: (chapterId: string) => void
+	onDeleteChapter?: (chapterId: string) => void
+	onMoveGroupChapter?: (chapterId: string) => void
 }
 
-function ChapterDropZone({ groupId, chapterIds, chapters, onUngroupChapter }: ChapterDropZoneProps) {
+function ChapterDropZone({
+	groupId,
+	chapterIds,
+	chapters,
+	onOpenChapter,
+	onUngroupChapter,
+	onDeleteChapter,
+	onMoveGroupChapter,
+}: ChapterDropZoneProps) {
 	const { setNodeRef, isOver } = useDroppable({ id: groupId })
 
 	return (
@@ -131,7 +191,16 @@ function ChapterDropZone({ groupId, chapterIds, chapters, onUngroupChapter }: Ch
 					</div>
 				) : (
 					chapters.map((chapter) => (
-						<ChapterItem key={chapter.id} chapter={chapter} onUngroup={() => onUngroupChapter?.(chapter.id)} />
+						<ChapterItem
+							key={chapter.id}
+							chapter={chapter}
+							onOpen={onOpenChapter ? () => onOpenChapter(chapter.id) : undefined}
+							onUngroup={onUngroupChapter ? () => onUngroupChapter(chapter.id) : undefined}
+							onDelete={onDeleteChapter ? () => onDeleteChapter(chapter.id) : undefined}
+							onMoveGroup={
+								onMoveGroupChapter ? () => onMoveGroupChapter(chapter.id) : undefined
+							}
+						/>
 					))
 				)}
 			</SortableContext>
